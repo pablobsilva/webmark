@@ -9,6 +9,12 @@ class AuthController extends Controller
         ->render();
     }
 
+    public function registrar()
+    {
+        return $this->view->make('auth.registrarse')
+        ->render();
+    }
+
     public function doLogin(){
         
         if($this->request->exists(array('usuario','password'))){
@@ -16,7 +22,7 @@ class AuthController extends Controller
             $db = Conexion::retornar();
             $usuarios = $db
             ->prepare('SELECT * FROM Usuario 
-                WHERE usuario = :usuario 
+                WHERE nombre = :usuario 
                 AND pass = :clave'
             );
             $usuarios->execute(array(
@@ -26,9 +32,9 @@ class AuthController extends Controller
             $usuario = $usuarios->fetch();
             
             if($usuario){
-                $_SESSION['auth']['id'] = $usuario->idUsuario;
-                $_SESSION['auth']['nombre'] = $usuario->usuario;
-                $_SESSION['auth']['rut'] = $usuario->Personal_Rut;
+                $_SESSION['auth']['rut'] = $usuario->rut;
+                $_SESSION['auth']['nombre'] = $usuario->nombre;
+                $_SESSION['auth']['tipo'] = $usuario->tipoUsuario;
             }
 
         }else{
@@ -39,6 +45,39 @@ class AuthController extends Controller
             return $this->redirect('auth/login');
         }
        return $this->redirect('/');
+    }
+
+    public function doRegister()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $rut = $_POST["rut"];
+        $nombre = $_POST["nombre"];
+        $pass = $_POST["password"];
+        $tipousuario = $_POST["tipo-usuario"];
+        $insert = $db->prepare(
+            "INSERT INTO Usuario 
+            (
+                rut, nombre, pass, tipoUsuario
+            )
+             VALUES
+            (
+                :rut, :nombre, :pass, :tipousuario
+            )");
+
+            $insert = $insert->execute(array(
+                ':rut' => $rut,
+                ':nombre' => $nombre,
+                ':pass' => $pass,
+                ':tipousuario' => $tipousuario,
+            ));
+        if($insert)
+        {
+            return $this->redirect('/');
+        }else{
+            return $this->redirect('auth/registrarse');
+        } 
+        
     }
 
     public function logout()

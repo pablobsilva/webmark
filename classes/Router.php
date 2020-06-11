@@ -49,7 +49,7 @@ class Router {
         if (is_array($output))
             $output = implode(',', $output);
     
-        echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+        //echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
     }
 
     public function get( $ruta, $controller )

@@ -5,11 +5,8 @@ class View
 
 	private $path;
 	private $file;
-
 	private $template;
-
 	private $variables;
-
 	public function __construct()
 	{
 		$this->path = '../views/';

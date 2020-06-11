@@ -10,6 +10,20 @@ class HomeController extends Controller
 
 	public function index()
 	{
-		return $this->redirect('gestionar');
+
+		$tipo = $_SESSION['auth']['tipo'];
+		print_r($_SESSION['auth']);
+		//exit;
+
+		if($tipo == "1")
+		{
+			return $this->redirect('gestionar');
+		}
+		else
+		{
+			return $this->redirect('usuario/navegar');
+		}
+
+		
 	}
 }

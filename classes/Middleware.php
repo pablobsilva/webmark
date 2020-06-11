@@ -3,7 +3,7 @@ class Middleware
 {
 	public function login()
 	{
-		if (!isset($_SESSION['auth']['id'])) {
+		if (!isset($_SESSION['auth']['rut'])) {
 			Helper::redirect('auth/login');
 			exit;
 		}
