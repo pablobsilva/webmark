@@ -1,11 +1,8 @@
 <?php
 
 require_once 'Controller.php';
-
 class UsuariosController extends Controller 
-
 {
-
     public function __construct()
     {
         $this->middleware('login');
@@ -16,4 +13,5 @@ class UsuariosController extends Controller
         return $this->view->make('usuario.navegar')
         ->render();
     }
+
 }

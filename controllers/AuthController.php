@@ -17,7 +17,8 @@ class AuthController extends Controller
 
     public function doLogin(){
         
-        if($this->request->exists(array('usuario','password'))){
+        if($this->request->exists(array('usuario','password')))
+        {
             require_once '../classes/Conexion.php';
             $db = Conexion::retornar();
             $usuarios = $db
@@ -31,13 +32,16 @@ class AuthController extends Controller
             ));
             $usuario = $usuarios->fetch();
             
-            if($usuario){
+            if($usuario)
+            {
                 $_SESSION['auth']['rut'] = $usuario->rut;
                 $_SESSION['auth']['nombre'] = $usuario->nombre;
                 $_SESSION['auth']['tipo'] = $usuario->tipoUsuario;
             }
 
-        }else{
+        }
+        else
+        {
             $this->session()->flash(array(
                 'danger' => 'Error de acceso, los datos ingresados son incorrectos'
             ));
@@ -65,7 +69,7 @@ class AuthController extends Controller
                 :rut, :nombre, :pass, :tipousuario
             )");
 
-            $insert = $insert->execute(array(
+        $insert = $insert->execute(array(
                 ':rut' => $rut,
                 ':nombre' => $nombre,
                 ':pass' => $pass,
@@ -74,10 +78,11 @@ class AuthController extends Controller
         if($insert)
         {
             return $this->redirect('/');
-        }else{
+        }
+        else
+        {
             return $this->redirect('auth/registrarse');
-        } 
-        
+        }       
     }
 
     public function logout()

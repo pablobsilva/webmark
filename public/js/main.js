@@ -4,5 +4,7 @@ document.querySelector("a[data-toggle=modal][href]").addEventListener('click', f
     axios.get(url).then(function (respuesta) {
         document.querySelector(target+' .modal-body').innerHTML = respuesta.data;
     });
-  });
+});
+
+
 

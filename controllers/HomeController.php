@@ -12,9 +12,6 @@ class HomeController extends Controller
 	{
 
 		$tipo = $_SESSION['auth']['tipo'];
-		print_r($_SESSION['auth']);
-		//exit;
-
 		if($tipo == "1")
 		{
 			return $this->redirect('gestionar');

@@ -24,7 +24,6 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-
   </div>
 </div>
 <header>
@@ -35,22 +34,22 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link" href=<?php echo url('solicitudes/venta');?>>Realizar venta<span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link" href=<?php echo url('solicitudes/cuentas');?>>Cuentas</a>
+          <a class="nav-item nav-link" href=<?php echo url('/ventas/vender');?>>Realizar venta<span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href=<?php echo url('/solicitudes/cuentas');?>>Cuentas</a>
           <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Productos
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href=<?php echo url('productos/productosver');?>>Ver Productos</a>
-          <a class="dropdown-item" data-toggle="modal" data-target="#AgregarProductoModal" href="productos/agregar">Agregar Producto</a>
-          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href=<?php echo url('/productos/productosver');?>>Ver Productos</a>
+          <a class="dropdown-item" data-toggle="modal" data-target="#AgregarProductoModal" href="/productos/agregar">Agregar Producto</a>
+          <!-- <div class="dropdown-divider"></div> -->
           <a class="dropdown-item" href="#">Editar Producto</a>
         </div>
       </li>
         </div>
       </div>
-      <div >
+      <div>
         <p class="text-white">Bienvenido <?php echo $_SESSION['auth']['nombre']?> </p>
         <a href=<?php echo url('auth/logout');?> class="text-white">Cerrar sesión</a>
       </div>
