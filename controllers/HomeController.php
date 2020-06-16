@@ -15,6 +15,9 @@ class HomeController extends Controller
 		if($tipo == "1")
 		{
 			return $this->redirect('gestionar');
+		}elseif($tipo == "2")
+		{
+			return $this->redirect('personal/navegar');
 		}
 		else
 		{

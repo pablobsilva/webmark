@@ -38,7 +38,7 @@ class ProductosController extends Controller
             //exit;
             return $this
             ->view
-            ->make('productos.productosver')
+            ->make('productos.ver')
             ->with(array(
                 'productos' => $productos
             ))
