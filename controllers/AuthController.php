@@ -3,9 +3,9 @@ include 'Controller.php';
 
 class AuthController extends Controller
 {
-    public function login()
+    public function home()
     {
-        return $this->view->make('auth.login')
+        return $this->view->make('home.home')
         ->render();
     }
 
@@ -15,9 +15,15 @@ class AuthController extends Controller
         ->render();
     }
 
+    public function login()
+    {
+        return $this->view->make('home.login/login')
+        ->render();
+    }
+
     public function registrar()
     {
-        return $this->view->make('auth.registrarse')
+        return $this->view->make('home.login/register')
         ->render();
     }
 

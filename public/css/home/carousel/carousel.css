@@ -1,0 +1,27 @@
+.carousel {
+    height: 100%;
+}
+
+.carousel-inner {
+    border-radius: 20em 0 0 20em;
+    height: 100%;
+}
+
+.carousel-inner > .carousel-item {
+    height: 100%;
+}
+
+.carousel-inner > .carousel-item > img{
+    height: 100%;
+}
+
+.carousel-indicators > li {
+    border-radius:100%;
+    -moz-border-radius:100%;
+    -webkit-border-radius:100%;
+    border: 2px solid white;
+    background-color: #FFFFFF;
+    height: 30px;
+    width: 30px;
+    margin-right: 3%;
+}

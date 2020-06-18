@@ -208,7 +208,6 @@ class ProductosController extends Controller
         $preciototal = $_POST["preciototal"];
         $distribuidor = $_POST["distribuidor"];
         $idproductoscompra = $_POST["idproductoscompra"];
-
         $productos = $_POST["productos[]"];
         $preciounitarios = $_POST["preciounitarios[]"];
         $preciototals = $_POST["prodeciototal"];
