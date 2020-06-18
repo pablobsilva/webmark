@@ -9,6 +9,12 @@ class AuthController extends Controller
         ->render();
     }
 
+    public function uwu()
+    {
+        return $this->view->make('test.uwu')
+        ->render();
+    }
+
     public function registrar()
     {
         return $this->view->make('auth.registrarse')
@@ -22,7 +28,7 @@ class AuthController extends Controller
             require_once '../classes/Conexion.php';
             $db = Conexion::retornar();
             $usuarios = $db
-            ->prepare('SELECT * FROM Usuario 
+            ->prepare('SELECT * FROM usuarios
                 WHERE nombre = :usuario 
                 AND pass = :clave'
             );

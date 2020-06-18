@@ -28,40 +28,85 @@ class VentasController extends Controller
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $fecha = $_SERVER['REQUEST_TIME'];
-        $hora = $_SERVER['REQUEST_TIME_FLOAT'];
-        $total = $_POST["total"];
-        $productos = $_POST["productos"];
-        $precio = $_POST["precio"];
-        $cantidad = $_POST["cantidad"];
+        $now = new DateTime();
+        date_default_timezone_set('America/Santiago');
+        $date = date('Y-m-d H:i:s', time());
+        $personal_rut = $_SESSION['auth']['rut'];
+        //$idproductos = $_POST["productos[]"];
+        //$cantidades = $_POST["cantidades[]"];
+        $cantidades = array("2","2","3","3");
+        $idproductos = array("1","2","3","4");
+        $longitud = count($idproductos);
+        $productos = array();
+
+        for ($i=0; $i < $longitud ; $i++) { 
+            $selecproductos = $db->prepare(
+                "SELECT * FROM productos WHERE idProducto = :idproducto"
+            );
+            $selecproductos->execute(array(
+                ':idproducto' => $idproductos[$i],
+            ));
+            $selecproductos = $selecproductos->fetchAll();
+            foreach($selecproductos as $productoselec){
+                $producto = new StdClass();
+                $producto->id = $productoselec->idProducto;
+                $producto->nombre = $productoselec->nombre;
+                $producto->precio = $productoselec->precio;
+                $producto->cantidad = $cantidades[$i];
+                $productos[] = $producto;
+            }
+        }
+        $idventa = $db->prepare(
+            "SELECT MAX(idVenta) AS idVenta FROM ventas"
+        );
+        $idventa->execute();
+        $idventa = $idventa->fetch();
+        $idventa=$idventa->idVenta+1;
 
         $insert = $db->prepare(
-            "INSERT INTO VentaProductos
+            "INSERT INTO detalles_venta
             (
-                fecha, hora, total
+                idventa, idproducto, cantidad, precio
             )
              VALUES
             (
-                :fecha, :hora, :total
+                :idventa, :idproducto, :cantidad, :precio
+            )"
+        );
+
+        foreach($productos as $producto) { 
+
+            $precio = $producto->precio;
+            $cantidad = $producto->cantidad;
+            $total = $precio*$cantidad;
+            $totalfinal = $totalfinal + $total;
+            /*print $total; 
+            print $producto->cantidad;
+            print $producto->id;
+            print $idventa;*/
+            $insert->execute(array(
+                ':idventa' => $idventa,
+                ':idproducto' => $producto->id,
+                ':cantidad' => $producto->cantidad,
+                ':precio' => $total,
+            ));
+        }
+
+        $insert = $db->prepare(
+            "INSERT INTO ventas
+            (
+                fechayhora, total, personal_rut
+            )
+             VALUES
+            (
+                :fechayhora, :total, :personal_rut
         )");
 
         $insert = $insert->execute(array(
-                ':fecha' => $fecha,
-                ':hora' => $hora,
-                ':total' => $total,
+                ':fechayhora' => $date,
+                ':total' => $totalfinal,
+                ':personal_rut' => $personal_rut,
         ));
-
-
-        $productos = $db->prepare(
-            "INSERT INTO ProductosVenta
-            (
-                producto, precio, cantidad
-            )
-             VALUES
-            (
-                :producto, :precio, :cantidad
-        )");
-        
 
         if($insert)
         {

@@ -16,4 +16,6 @@ class SolicitudesController extends Controller
         return $this->view->make('solicitudes.gestionar')
         ->render();
     }
+
+    
 }
