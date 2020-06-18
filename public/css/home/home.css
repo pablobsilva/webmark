@@ -1,0 +1,105 @@
+body {
+    left: 0;
+    margin: 0;
+    background-color: #f4f4f6 !important;
+}
+
+.navbar {
+    background-color: #10124b !important;
+}
+
+.navbar a {
+    color: white !important;
+}
+
+.container-fluid {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.row {
+    margin: 0px;
+}
+
+.article-nosotros {
+    height: 69%;
+}
+
+.col {
+    padding: 0;
+}
+
+.bienvenida {
+    height: 100%;
+}
+
+.title-bienvenida {
+    height: 70%;
+    display: flex;
+    align-items: center;
+    font-size: 5em;
+    color: #3a3a3a;
+}
+
+.title-bienvenida > .row {
+    width: 90%;
+}
+
+.title-bienvenida > .row > div:first-child {
+    text-align: center;
+}
+
+.title-bienvenida > .row > div:last-child {
+    text-align: end;
+}
+
+.title-bienvenida > .row > div:last-child > span {
+    font-weight: bold;
+}
+
+.body-bienvenida {
+    height: 30%;
+}
+
+.body-bienvenida > div {
+    width: 40%;
+    font-size: 2em;
+    font-weight: bold;
+    margin-left: 5%;
+}
+
+.separate-line {
+    height: 10%;
+    background-color: #10124b;
+    width: 100%;
+}
+
+.naranja {
+    color: white;
+    border-color: orangered;
+    background-color: orangered;
+    font-size: 1.0em;
+}
+
+.naranja:hover {
+    color: orangered;
+    border-color: #10124b;
+    background-color: #10124b;
+    font-size: 1.0em;
+}
+
+.info-empresa {
+    margin-top: 100px;
+}
+
+.info-empresa > div:first-child{
+    text-align: center;
+    font-size: 2em;
+    color: #313131;
+}
+
+.card {
+    background-color: #10124b !important;
+}
+
