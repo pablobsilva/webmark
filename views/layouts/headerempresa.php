@@ -45,6 +45,7 @@
           <a class="dropdown-item" data-toggle="modal" data-target="#AgregarProductoModal" href="/productos/agregar">Agregar Producto</a>
           <!-- <div class="dropdown-divider"></div> -->
           <a class="dropdown-item" href="#">Editar Producto</a>
+          <a class="dropdown-item" href="productos/registrarventa">Registrar Compra</a>
         </div>
       </li>
       <a class="nav-item nav-link" href=<?php echo url('/auth/registrarpersonal');?>>Registrar Personal</a>

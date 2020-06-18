@@ -5,6 +5,7 @@ $router = new Router;
 
 
 $router->get('', 'HomeController@index');
+$router->get('uwu', 'AuthController@uwu');
 $router->get('auth/login', 'AuthController@login');
 $router->get('auth/registrarse', 'AuthController@registrar');
 $router->get('auth/logout', 'AuthController@logout');
@@ -25,6 +26,8 @@ $router->post('auth/registrar', 'UsuariosController@doRegister');
 $router->post('productos/agregar','ProductosController@AgregarProducto');
 $router->post('categorias/agregar','CategoriasController@AgregarCategoria');
 $router->post('auth/registrarpersonal','UsuariosController@RegistrarPersonal');
+$router->post('productos/registrarcompra','ProductosController@RegistrarCompra');
+$router->get('productos/registrarventa','VentasController@RealizarVenta');
 
 
 $router->response();
