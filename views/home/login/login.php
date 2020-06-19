@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="../../../public/css/home/login/login.css">
+    <link rel="stylesheet" href="/css/home/login/login.css">
 
     <title>Inicie Sesion!</title>
 </head>
@@ -22,14 +22,14 @@
         <article class="col-sm-12 col-md-4 col-lg-4 vh-100 d-flex justify-content-center">
             <div class="row row-cols-sm-1 row-cols-md-1 vh-100" style="width: 80%;">
                 <div style="width: 100%; height: 40%; background-color: orangered;">
-                    <img class="img-fluid" src="../../../public/assets/home/login/PYMES-1.png" alt="AQUI DEBERIA IR UNA IMAGEN">
+                    <img class="img-fluid" src="/assets/home/login/PYMES-1.png" alt="AQUI DEBERIA IR UNA IMAGEN">
                 </div>
                 <div
                     style="width: 100%; height: 20%; display: flex; justify-content: center; align-items: center; background-color: #f4f4f6 !important;">
                     <h1>TODO COMIENZA AHORA!</h1>
                 </div>
                 <div style="width: 100%; height: 40%; background-color: orangered;">
-                    <img class="img-fluid" src="../../../public/assets/home/login/pymes-2.jpg" alt="AQUI DEBERIA IR UNA IMAGEN">
+                    <img class="img-fluid" src="/assets/home/login/pymes-2.jpg" alt="AQUI DEBERIA IR UNA IMAGEN">
                 </div>
             </div>
         </article>
