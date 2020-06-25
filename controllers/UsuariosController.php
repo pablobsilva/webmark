@@ -14,6 +14,12 @@ class UsuariosController extends Controller
         ->render();
     }
 
+    public function indexAdmin()
+    {
+        return $this->view->make('administrador.index')
+        ->render();
+    }
+
     public function navegar()
     {
         return $this->view->make('usuario.navegar')

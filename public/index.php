@@ -14,12 +14,15 @@ $router->get('auth/registrarpersonal','UsuariosController@FormularioRegistrarPer
 
 $router->get('usuario/navegar', 'UsuariosController@navegar');
 $router->get('personal/navegar', 'UsuariosController@navegarPersonal');
+$router->get('dashboard', 'UsuariosController@indexAdmin');
+$router->get('productos', 'ProductosController@productos');
 
 $router->get('gestionar', 'SolicitudesController@gestionar');
 $router->get('ventas/vender', 'VentasController@solicitar');
 $router->get('solicitudes/cuentas', 'VentasController@verCuentas');
 $router->get('productos/ver', 'ProductosController@solicitar');
 $router->get('productos/agregar','ProductosController@FormularioAgregar');
+$router->post('productos/codigodebarra','ProductosController@ProductoPorCodigoBarra');
 
 
 $router->post('auth/login', 'AuthController@doLogin');
@@ -28,7 +31,11 @@ $router->post('productos/agregar','ProductosController@AgregarProducto');
 $router->post('categorias/agregar','CategoriasController@AgregarCategoria');
 $router->post('auth/registrarpersonal','UsuariosController@RegistrarPersonal');
 $router->post('productos/registrarcompra','ProductosController@RegistrarCompra');
-$router->get('productos/registrarventa','VentasController@RealizarVenta');
+$router->post('auth/registrar','VentasController@VerVentas');
+$router->get('productos/registrarventa','VentasController@VerCuentaDiaria');
+$router->get('productos/registrarcompra','ProductosController@RegistrarCompra');
+
+
 
 
 $router->response();

@@ -43,12 +43,12 @@
                         <div class="card-body">
                             <h1 class="card-title">Bienvenido, Porfavor inicie sesion.</h1>
 
-                            <form action="">
+                            <form method="POST" action="<?php echo url('auth/login')?>">
                                 
                                 <div>
                                     <h1> <label for="basic-url">Rut:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
-                                        <input type="text" class="form-control" id="basic-url"
+                                        <input type="text" class="form-control" id="basic-url" required name="usuario"
                                             aria-describedby="basic-addon3">
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                 <div>
                                     <h1> <label for="basic-url">Contrasena:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
-                                        <input type="text" class="form-control" id="basic-url"
+                                        <input type="password" class="form-control" id="basic-url" required name="password"
                                             aria-describedby="basic-addon3">
                                     </div>
                                 </div>

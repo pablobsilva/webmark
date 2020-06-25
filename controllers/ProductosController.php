@@ -5,8 +5,14 @@ class ProductosController extends Controller
 {
     
     public function __construct()
+    { 
+       // $this->middleware('login');
+    }
+
+    public function productos()
     {
-        $this->middleware('login');
+        return $this->view->make('administrador.producto/productos')
+        ->render();
     }
 
     public function solicitar($idcategoria = "")
@@ -126,7 +132,7 @@ class ProductosController extends Controller
         $codigodebarra = $_POST["codigodebarra"];
         $categoria = $_POST["categoria"];
         $insert = $db->prepare(
-            "UPDATE Producto
+            "UPDATE productos
             
                SET nombre = :nombre, precio = :precio, codigodebarra = :codigodebarra, categoria_idCategoria = :idcategoria
                
@@ -151,7 +157,7 @@ class ProductosController extends Controller
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
         $idproducto = $_POST["idproducto"];    
-        $delete = $db ->prepare("DELETE FROM Producto WHERE idProducto = :idproducto");
+        $delete = $db ->prepare("DELETE FROM productos WHERE idProducto = :idproducto");
         $delete = $delete->execute(array(
             ':idproducto' => $idproducto,
         ));
@@ -172,7 +178,7 @@ class ProductosController extends Controller
         $fechavencimiento = $_POST["fechavencimiento"];
 
         $update = $db->prepare(
-            "UPDATE Producto 
+            "UPDATE productos 
             SET stock = stock + :cantidad
             WHERE idProducto = :idproducto"
         );
@@ -204,64 +210,106 @@ class ProductosController extends Controller
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();  
-        $cantidad = $_POST["cantidad"];
-        $preciototal = $_POST["preciototal"];
+        $cantidades = $_POST["cantidades[]"];
         $distribuidor = $_POST["distribuidor"];
-        $idproductoscompra = $_POST["idproductoscompra"];
-        $productos = $_POST["productos[]"];
-        $preciounitarios = $_POST["preciounitarios[]"];
-        $preciototals = $_POST["prodeciototal"];
+        $idproductos = $_POST["idproductoscompra[]"];
+        //$cantidades = array("2","3");
+        //$idproductos = array("1","4");
+        //$distribuidor = "carlos pinto";
+        $longitud = count($idproductos);
         $idcompra = $db->prepare(
-            "SELECT MAX(idCompra) AS idCompra FROM Compra"
+            "SELECT MAX(idCompra) AS idCompra FROM compras"
         );
         $idcompra->execute();
         $idcompra = $idcompra->fetch();
         $idcompra=$idcompra->idCompra+1;
-        //print_r($idcompra);
-        //exit;
+
         $insertproductos = $db->prepare(
-            "INSERT INTO ProductosCompra
+            "INSERT INTO detalles_compra
             (
-                producto, preciounitario, preciototal, idCompra
+                idcompra, idproducto, preciounitario, cantidad, preciototal
             )
             VALUES
             (
-                :producto, :preciounitario, :preciototal, :idCompra
+                :idcompra, :idproducto, :preciounitario, :cantidad, :preciototal
             )"
         );
-        $longitud = count($productos);
-
+        $totalfinal = 0;
         for($i=0; $i<$longitud; $i++)
         {
-            $insertproductos = $insertproductos->execute(array(
-                ':producto' => $producto[$i],
-                ':preciounitario' => $preiounitario[$i],
-                ':preciototal' => $preciototal[$i],
-                ':idCompra' => $idCompra,
+            $selecproducto = $db->prepare(
+                "SELECT * FROM productos WHERE idProducto = :idproducto"
+            );
+            $selecproducto->execute(array(
+                ':idproducto' => $idproductos[$i],
             ));
+            $selecproducto = $selecproducto->fetch();
+            $producto = new StdClass();
+            $producto->id = $selecproducto->idProducto;
+            $producto->nombre = $selecproducto->nombre;
+            $producto->precio = $selecproducto->precio;
+            $producto->cantidad = $cantidades[$i];
+            $productos[] = $producto;
+            $precio = $selecproducto->precio;
+            $cantidad = $cantidades[$i];
+            $total = $precio*$cantidad;
+            $totalfinal = $totalfinal + $total;                
+            $insertproductos->execute(array(
+                ':idcompra' => $idcompra,
+                ':idproducto' => $selecproducto->idProducto,
+                ':preciounitario' => $selecproducto->precio,
+                ':cantidad' => $producto->cantidad,
+                ':preciototal' => $total,
+            ));
+            $update = $db->prepare(
+                "UPDATE productos 
+                SET stock = stock + :cantidad
+                WHERE idProducto = :idproducto"
+            );
+            $update->execute(array(
+                ':idproducto' => $producto->id,
+                ':cantidad' => $cantidades[$i],
+            ));    
+            
         }
 
-
         $insertcompra = $db->prepare(
-            "INSERT INTO Compra
+            "INSERT INTO compras
             (
-                cantidad, preciototal, distribuidor
+                preciototal, distribuidor, fechayhora
             )
              VALUES
             (
-                :cantidad, :preciototal, :distribuidor
+                :preciototal, :distribuidor, :fechayhora
             )"
         );
+        date_default_timezone_set('America/Santiago');
+        $date = date('Y-m-d', time());
+        //$hora = date('H:i:s', time());
+        print $date;
         $insertcompra = $insertcompra->execute(array(
-            ':cantidad' => $cantidad,
-            ':preciototal' => $preciototal,
+            ':preciototal' => $totalfinal,
             ':distribuidor' => $distribuidor,
-            ':idproductoscompra' => $idproductoscompra,
+            ':fechayhora' => $date,
         ));
         if($insertcompra)
         {
             return $this->redirect('/');
         }
+    }
+
+    public function ProductoPorCodigoBarra()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $request = $this->request;
+        //echo "<script>console.log( 'Debug Objects: " . $request->codigodebarra . "' );</script>";
+        $producto = $db->prepare("SELECT * FROM productos WHERE codigodebarra = :codigodebarra");
+        $producto->execute(array(
+            ':codigodebarra' => $request->codigodebarra,
+        ));
+        $producto = $producto->fetch();
+        echo json_encode($producto);
     }
 
 

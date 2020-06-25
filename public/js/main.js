@@ -6,5 +6,8 @@ document.querySelector("a[data-toggle=modal][href]").addEventListener('click', f
     });
 });
 
+/* Codigo para mandar las vistas a los modales según corresponda */
+
+
 
 

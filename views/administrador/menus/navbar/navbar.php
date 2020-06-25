@@ -12,7 +12,7 @@
 
     <ul class="navbar-nav px-3">
       <li class="nav-item text-nowrap">
-        <a class="nav-link" href="#">Cerrar Sesion</a>
+        <a class="nav-link" href="auth/logout">Cerrar Sesion</a>
       </li>
     </ul>
 

@@ -14,7 +14,7 @@ class HomeController extends Controller
 		$tipo = $_SESSION['auth']['tipo'];
 		if($tipo == "1")
 		{
-			return $this->redirect('gestionar');
+			return $this->redirect('dashboard');
 			
 		}elseif($tipo == "2")
 		{

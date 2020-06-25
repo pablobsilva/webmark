@@ -27,6 +27,4 @@ Class Controller
 		print("<b>LOCATION: ".$location);
 		return Helper::redirect($location);
 	}
-
-
 }

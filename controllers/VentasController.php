@@ -6,7 +6,7 @@ class VentasController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('login');
+       // $this->middleware('login');
     }
 
     public function solicitar()
@@ -18,19 +18,56 @@ class VentasController extends Controller
         ->render();
     }
 
-    public function verCuentas()
+    public function VerVentas()
     {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $request = $this->request;
+        $date = $request->date;
+        if($date != "")
+        {
+            $ventas = $db->prepare("SELECT * FROM ventas WHERE fecha = :fecha");
+            $ventas->execute(array(
+                ':fecha' => $date
+            ));
+            $ventas = $ventas->fetchAll();
+            return $this
+            ->view
+            ->make('ventas.verVentas')
+            ->with(array(
+                'ventas' => $ventas,
+            ))
+            ->render();
+        }else
+        {
+            $ventas = $db->prepare("SELECT * FROM ventas");
+            $ventas->execute();
+            $ventas = $ventas->fetchAll();
+            return $this
+            ->view
+            ->make('ventas.verVentas')
+            ->with(array(
+                'ventas' => $ventas,
+            ))
+            ->render();
+        }
         return $this->view->make('solicitudes.cuentas')
         ->render();
+    }
+
+    public function AgregarProductoVenta()
+    {
+
+
     }
 
     public function RealizarVenta()
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $now = new DateTime();
         date_default_timezone_set('America/Santiago');
-        $date = date('Y-m-d H:i:s', time());
+        $date = date('Y-m-d', time());
+        $hora = date('H:i:s', time());
         $personal_rut = $_SESSION['auth']['rut'];
         //$idproductos = $_POST["productos[]"];
         //$cantidades = $_POST["cantidades[]"];
@@ -40,20 +77,29 @@ class VentasController extends Controller
         $productos = array();
 
         for ($i=0; $i < $longitud ; $i++) { 
-            $selecproductos = $db->prepare(
+            $selecproducto = $db->prepare(
                 "SELECT * FROM productos WHERE idProducto = :idproducto"
             );
-            $selecproductos->execute(array(
+            $selecproducto->execute(array(
                 ':idproducto' => $idproductos[$i],
             ));
-            $selecproductos = $selecproductos->fetchAll();
-            foreach($selecproductos as $productoselec){
+            $selecproducto = $selecproducto->fetchAll();
+            foreach($selecproducto as $productoselec){
                 $producto = new StdClass();
                 $producto->id = $productoselec->idProducto;
                 $producto->nombre = $productoselec->nombre;
                 $producto->precio = $productoselec->precio;
                 $producto->cantidad = $cantidades[$i];
                 $productos[] = $producto;
+                $update = $db->prepare(
+                    "UPDATE productos 
+                    SET stock = stock - :cantidad
+                    WHERE idProducto = :idproducto"
+                );
+                $update->execute(array(
+                    ':idproducto' => $producto->id,
+                    ':cantidad' => $cantidades[$i],
+                ));
             }
         }
         $idventa = $db->prepare(
@@ -80,10 +126,6 @@ class VentasController extends Controller
             $cantidad = $producto->cantidad;
             $total = $precio*$cantidad;
             $totalfinal = $totalfinal + $total;
-            /*print $total; 
-            print $producto->cantidad;
-            print $producto->id;
-            print $idventa;*/
             $insert->execute(array(
                 ':idventa' => $idventa,
                 ':idproducto' => $producto->id,
@@ -95,17 +137,18 @@ class VentasController extends Controller
         $insert = $db->prepare(
             "INSERT INTO ventas
             (
-                fechayhora, total, personal_rut
+                fecha, hora, total, personal_rut
             )
              VALUES
             (
-                :fechayhora, :total, :personal_rut
+                :fecha, :hora, :total, :personal_rut
         )");
 
         $insert = $insert->execute(array(
-                ':fechayhora' => $date,
-                ':total' => $totalfinal,
-                ':personal_rut' => $personal_rut,
+            ':fecha' => $date,
+            ':hora' => $hora,
+            ':total' => $totalfinal,
+            ':personal_rut' => $personal_rut,
         ));
 
         if($insert)
@@ -114,20 +157,21 @@ class VentasController extends Controller
         }        
     }
 
-    public function VerVentas()
+    public function VerCuentaDiaria()
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $ventas = $db->prepare('SELECT * FROM VentaProductos');
-        $ventas->execute();
-        $ventas = $ventas->fetchAll();
-        return $this
-        ->view
-        ->make('ventas.verVentas')
-        ->with(array(
-            'ventas' => $ventas,
+        date_default_timezone_set('America/Santiago');
+        $actual = date('Y-m-d', time());
+        //$request = $this->request;
+        $dia = $db->prepare("SELECT * FROM ventas WHERE fecha = :fecha");
+        $dia->execute(array(
+            ':fecha' => $actual
+        ));
+        $dia = $dia->fetchAll();
+        return $this->view->make('ventas.cuentadiaria')->with(array(
+            'cuenta' => $dia,
         ))
         ->render();
     }
-
 }

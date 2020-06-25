@@ -12,28 +12,28 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <link href="../css/administrador/left-sidebar.css" rel="stylesheet">
+    <link href="/css/administrador/left-sidebar.css" rel="stylesheet">
 
 </head>
 
 <body>
 
     <!-- NAVBAR -->
-    <?php require './menus/navbar/navbar.php' ?>
+    <?php require_once '/var/www/WebMarketTest/views/administrador/menus/navbar/navbar.php' ?>
     <!-- NAVBAR -->
 
     <div class="container-fluid">
         <div class="row">
 
             <!-- LEFT SIDEBAR -->
-            <?php require './menus/left-sidebar/left-sidebar.php' ?>
+            <?php require_once '/var/www/WebMarketTest/views/administrador/menus/left-sidebar/left-sidebar.php' ?>
             <!-- LEFT SIDEBAR -->
 
 
             <!-- CONTENT PAGE -->
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 
-                <?php require './dashboard/dashboard.php' ?>
+                <?php require '/var/www/WebMarketTest/views/administrador/dashboard/dashboard.php' ?>
 
             </main>
             <!-- CONTENT PAGE -->
@@ -56,7 +56,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
-    <script src="../js/administrador/main.js"></script>
+    <script src="/js/administrador/main.js"></script>
 
 </body>
 
