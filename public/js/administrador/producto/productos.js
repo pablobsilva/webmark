@@ -66,7 +66,6 @@ function rellenarModal(producto) {
             categoria.selectedIndex = categoria.options[i].index;
         }
     };
-    categoria.value = producto.categoria;
     $('#modificarModal').modal();
 }
 
