@@ -69,10 +69,10 @@ class VentasController extends Controller
         $date = date('Y-m-d', time());
         $hora = date('H:i:s', time());
         $personal_rut = $_SESSION['auth']['rut'];
-        //$idproductos = $_POST["productos[]"];
-        //$cantidades = $_POST["cantidades[]"];
-        $cantidades = array("2","2","3","3");
-        $idproductos = array("1","2","3","4");
+        $idproductos = $_POST["productos[]"];
+        $cantidades = $_POST["cantidades[]"];
+        //$cantidades = array("2","2","3","3");
+        //$idproductos = array("1","2","3","4");
         $longitud = count($idproductos);
         $productos = array();
 

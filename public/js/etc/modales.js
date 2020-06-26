@@ -6,6 +6,13 @@ document.querySelector("a[data-toggle=modal][href]").addEventListener('click', f
     });
 });
 
+document.getElementById("AgregarProductoBtn").addEventListener('click', function () {
+    var target = this.getAttribute("data-target");
+    axios.get('productos/agregar').then(function (respuesta) {
+        document.querySelector(target+' .modal-body').innerHTML = respuesta.data;
+    });
+});
+
 /* Codigo para mandar las vistas a los modales según corresponda */
 
 

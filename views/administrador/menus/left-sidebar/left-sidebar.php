@@ -28,7 +28,6 @@
                     Trabajadores
                 </a>
             </li>
-            
         </ul>
         <!-- ITEMS -->
             

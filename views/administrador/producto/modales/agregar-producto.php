@@ -10,7 +10,6 @@
                         </div>
                         <form>
                             <div class="modal-body">
-
                                 <div class="form-group">
                                     <label for="nombre">Nombre</label>
                                     <input type="text" class="form-control" id="nombre"
@@ -18,7 +17,6 @@
                                     <small id="emailHelp" class="form-text text-muted"> por si quieres mostrar una
                                         ayuda</small>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="precio">Precio</label>
                                     <input type="text" class="form-control" id="precio">
@@ -30,10 +28,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Categoria</label>
-                                    <input type="text" class="form-control" id="exampleInputPassword1">
+                                    <label for="categorias-cbx">Categoria:</label>
+                                    <select class="form-control" id="categorias-cbx" name="categoria">
+                                        <?php foreach($this->categorias as $categoria):?>
+                                            <option value="<?php echo $categoria->idCategoria;?>"><?php echo $categoria->Nombre;?></option>
+                                        <?php endforeach; ?>    
+                                    </select> 
                                 </div>
-
+                                
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Empresa</label>
                                     <input type="text" class="form-control" id="exampleInputPassword1">

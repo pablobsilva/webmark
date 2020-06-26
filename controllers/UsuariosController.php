@@ -63,5 +63,12 @@ class UsuariosController extends Controller
         }    
     }
 
+    public function verpersonal()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $personal = $db->prepare("SELECT * FROM usuarios WHERE ");
+    }
+
 
 }

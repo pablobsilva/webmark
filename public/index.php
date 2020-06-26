@@ -4,24 +4,25 @@ require_once '../classes/Router.php';
 $router = new Router;
 
 
-$router->get('', 'HomeController@index');
+$router->get('', 'HomeController@index'); //redirecciona al dashboard si hay sesión, sino al login para iniciar
 $router->get('uwu', 'AuthController@uwu');
-$router->get('home', 'AuthController@home');
-$router->get('auth/login', 'AuthController@login');
-$router->get('auth/registrarse', 'AuthController@registrar');
-$router->get('auth/logout', 'AuthController@logout');
-$router->get('auth/registrarpersonal','UsuariosController@FormularioRegistrarPersonal');
+$router->get('home', 'AuthController@home'); //redireccione al home principal
+$router->get('auth/login', 'AuthController@login'); // para logear
+$router->get('auth/registrarse', 'AuthController@registrar'); // para registrarse
+$router->get('auth/logout', 'AuthController@logout'); // cerrar sesión 
+$router->get('auth/registrarpersonal','UsuariosController@FormularioRegistrarPersonal'); // formulario para registrar al personal
 
 $router->get('usuario/navegar', 'UsuariosController@navegar');
 $router->get('personal/navegar', 'UsuariosController@navegarPersonal');
-$router->get('dashboard', 'UsuariosController@indexAdmin');
-$router->get('productos', 'ProductosController@productos');
+$router->get('dashboard', 'UsuariosController@indexAdmin'); // dashboard admin 
+$router->get('productos', 'ProductosController@productos'); // ver todos los productos
 
 $router->get('gestionar', 'SolicitudesController@gestionar');
 $router->get('ventas/vender', 'VentasController@solicitar');
 $router->get('solicitudes/cuentas', 'VentasController@verCuentas');
 $router->get('productos/ver', 'ProductosController@solicitar');
 $router->get('productos/agregar','ProductosController@FormularioAgregar');
+$router->get('productos/editar','ProductosController@productoPorId');
 $router->post('productos/codigodebarra','ProductosController@ProductoPorCodigoBarra');
 
 

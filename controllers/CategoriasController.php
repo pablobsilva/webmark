@@ -45,6 +45,20 @@ class HomeController extends Controller
             return $this->redirect('/');
         }
     }
+
+    public function Categorias()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $select = $db->prepare(
+            "SELECT * FROM categorias");
+        $select->execute();
+        $select = $select->fetchAll();
+        if($select)
+        {
+            json_encode($select);
+        }           
+    }
 }
 
 

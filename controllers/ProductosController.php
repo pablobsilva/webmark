@@ -35,7 +35,8 @@ class ProductosController extends Controller
             ->view
             ->make('administrador.producto/productos')
             ->with(array(
-                'productos' => $productos
+                'categorias' => $categorias,
+                'productos' => $productos,
             ))
             ->render();
     }
@@ -63,20 +64,18 @@ class ProductosController extends Controller
         ->render();
     }
 
-    public function FormularioAgregar(){
 
+    public function productoPorId()
+    {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $categorias = $db->prepare('SELECT * FROM Categoria');
-        $categorias->execute();
-        $categorias = $categorias->fetchAll();
-        return $this
-        ->view
-        ->make('productos.agregar')
-        ->with(array(
-            'categorias' => $categorias
-        ))
-        ->render();
+        $request = $this->request;
+        $id = $request->id;
+        $producto = $db->prepare("SELECT * FROM productos WHERE idProducto = :id");
+        $producto->execute(array(
+            ':id'=> $id
+        ));
+        json_encode($producto);
     }
 
     public function AgregarProducto()
