@@ -22,8 +22,10 @@ $router->get('ventas/vender', 'VentasController@solicitar');
 $router->get('solicitudes/cuentas', 'VentasController@verCuentas');
 $router->get('productos/ver', 'ProductosController@solicitar');
 $router->get('productos/agregar','ProductosController@FormularioAgregar');
+
 $router->post('productos/editar','ProductosController@productoPorId');
 $router->post('productos/update','ProductosController@EditarProducto');
+$router->post('productos/eliminar','ProductosController@EliminarProducto');
 $router->post('productos/codigodebarra','ProductosController@ProductoPorCodigoBarra');
 
 

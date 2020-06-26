@@ -162,16 +162,17 @@ class ProductosController extends Controller
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $idproducto = $_POST["idproducto"];    
+        $request = $this->request;
+        $idproducto = $request->id;    
         $delete = $db ->prepare("DELETE FROM productos WHERE idProducto = :idproducto");
         $delete = $delete->execute(array(
             ':idproducto' => $idproducto,
         ));
+        print $delete;
         if($delete)
         {
-            return $this->redirect('/');
+            return $this->redirect('productos');
         }
-        
     }
 
     public function AgregarStock()
