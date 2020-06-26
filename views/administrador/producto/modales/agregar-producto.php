@@ -8,47 +8,44 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form>
+            <form method="POST" action="productos/agregar">
                 <div class="modal-body">
 
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" aria-describedby="emailHelp">
+                        <input type="text" class="form-control" id="nombre" aria-describedby="emailHelp" name="nombre">
                         <small id="emailHelp" class="form-text text-muted"> por si quieres mostrar una
                             ayuda</small>
                     </div>
 
                     <div class="form-group">
                         <label for="precio">Precio</label>
-                        <input type="text" class="form-control" id="precio">
+                        <input type="text" class="form-control" id="precio" name="precio">
                     </div>
 
                     <div class="form-group">
                         <label for="exampleInputPassword1">Codigo de Barra</label>
-                        <input type="text" class="form-control" id="codigoBarra">
+                        <input type="text" class="form-control" id="codigoBarra" name="codigodebarra">
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Categoria</label>
-                        <?php foreach($this->categorias as $categoria):?>
-                            <option value="<?php echo $categoria->idCategoria;?>"><?php echo $categoria->Nombre;?></option>
-                        <?php endforeach; ?>
+                        <label for="categorias-cbx">Categoria:</label>
+                        <select class="form-control" name="categoria">
+                            <?php foreach($this->categorias as $categoria):?>
+                                <option value="<?php echo $categoria->idCategoria;?>"><?php echo $categoria->Nombre;?></option>
+                            <?php endforeach; ?>    
+                        </select> 
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Empresa</label>
-                        <input type="text" class="form-control" id="empresa">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Cantidad</label>
-                        <input type="text" class="form-control" id="cantidad">
+                        <label for="exampleInputPassword1">Stock inicial</label>
+                        <input type="number" class="form-control" id="cantidad" name="stock">
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Aceptar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
                 </div>
             </form>
         </div>
