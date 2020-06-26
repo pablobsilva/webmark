@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     let editProducts = document.getElementsByClassName('editProduct');
 
-    editProducto.addEventListener('click', obtenerProductoInput)
+    editProducto.addEventListener('click', obtenerProductoInput);
+
+    setEventOnEditProduct(editProducts);
 
 });
 
