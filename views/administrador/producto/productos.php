@@ -60,8 +60,7 @@
                                 <th scope="col">Precio</th>
                                 <th scope="col">Codigo de Barra</th>
                                 <th scope="col">Categoria</th>
-                                <th scope="col">Empresa</th>
-                                <th scope="col">Cantidad</th>
+                                <th scope="col">Stock</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,7 +71,6 @@
                                 <td><?php echo $producto->precio;?></td>
                                 <td><?php echo $producto->codigodebarra;?></td>
                                 <td><?php echo $producto->categoria;?></td>
-                                <td><?php echo $producto->empresa;?></td>
                                 <td><?php echo $producto->stock;?></td>
                                 <td>    
                                     <button class='btn btn-default btn-sm editProduct' data-product-id="<?php echo $producto->idProducto;?>">
@@ -118,8 +116,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
-    <script src="../../js/administrador/main.js"></script>
-    <script src="../../js/administrador/producto/productos.js"></script>
+    <script src="/js/administrador/main.js"></script>
+    <script src="/js/administrador/producto/productos.js"></script>
 
 </body>
 

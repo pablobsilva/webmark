@@ -71,32 +71,46 @@ class ProductosController extends Controller
         $db = Conexion::retornar();
         $request = $this->request;
         $id = $request->id;
-        $producto = $db->prepare("SELECT * FROM productos WHERE idProducto = :id");
+        //print "id: ".$id;
+        $producto = $db->prepare('SELECT * FROM productos WHERE idProducto = :id');
         $producto->execute(array(
             ':id'=> $id
         ));
-        json_encode($producto);
+        
+        $producto = $producto->fetch();
+        
+       /* $seleccionado = new stdClass();
+        $seleccionado->nombre = $producto->nombre;
+        $seleccionado->precio = $producto->precio;
+        $seleccionado->codigodebarra = $producto->codigodebarra;
+        $seleccionado->stock = $producto->stock;
+        $seleccionado->categoria = $producto->categoria;
+        $seleccionados[] = $seleccionado;
+       // print_r($seleccionado);*/
+        echo json_encode($producto);
     }
 
     public function AgregarProducto()
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $nombre = $_POST["nombre"];
-        $precio = $_POST["precio"];
-        $codigodebarra = $_POST["codigodebarra"];
+        $request = $this->request;
+        $nombre = $request->nombre;
+        $precio = $request->precio;
+        $codigodebarra = $request->codigodebarra;
         $empresa = $_SESSION['auth']['nombre'];
-        $categoria = $_POST["categoria"];
+        $categoria = $request->categoria;
+        $stock = $request->stock;
 
         $insert = $db->prepare(
             "INSERT INTO productos
             (
-                nombre, precio, empresa, codigodebarra, categoria_idCategoria
+                nombre, precio, empresa, codigodebarra, categoria, stock
             )
              VALUES
             (
-                :nombre, :precio, :empresa, :codigodebarra, :idcategoria
-            )");
+                :nombre, :precio, :empresa, :codigodebarra, :idcategoria, :stock
+        )");
 
         $insert = $insert->execute(array(
                 ':nombre' => $nombre,
@@ -104,10 +118,11 @@ class ProductosController extends Controller
                 ':empresa' => $empresa,
                 ':codigodebarra' => $codigodebarra,
                 ':idcategoria' => $categoria,
+                ':stock' => $stock,
             ));
         if($insert)
         {
-            return $this->redirect('/');
+            return $this->redirect('productos');
         }
     }
     
@@ -115,29 +130,31 @@ class ProductosController extends Controller
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $idproducto = $_POST["idproducto"];
-        $nombre = $_POST["nombre"];
-        $precio = $_POST["precio"];
-        $codigodebarra = $_POST["codigodebarra"];
-        $categoria = $_POST["categoria"];
+        $request = $this->request;
+        $idproducto = $request->id;
+        $nombre = $request->nombre;
+        $precio = $request->precio;
+        $codigodebarra = $request->codigodebarra;
+        $categoria = $request->categoria;
+        $stock = $request->stock;
         $insert = $db->prepare(
             "UPDATE productos
             
-               SET nombre = :nombre, precio = :precio, codigodebarra = :codigodebarra, categoria_idCategoria = :idcategoria
+               SET nombre = :nombre, precio = :precio, codigodebarra = :codigodebarra, categoria = :idcategoria, stock = :stock
                
                WHERE idProducto = :idproducto
-               ");
-
+        ");
         $insert = $insert->execute(array(
                 ':nombre' => $nombre,
                 ':precio' => $precio,
                 ':codigodebarra' => $codigodebarra,
                 ':idcategoria' => $categoria,
+                ':stock' => $stock,
                 ':idproducto' => $idproducto,
-            ));
+        ));
         if($insert)
         {
-            return $this->redirect('/');
+            return $this->redirect('productos');
         }
     }
 
