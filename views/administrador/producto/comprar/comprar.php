@@ -12,92 +12,108 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-    <link href="/css/administrador/left-sidebar.css" rel="stylesheet">
+    <link href="../../../css/administrador/left-sidebar.css" rel="stylesheet">
 
 </head>
 
 <body>
 
     <!-- NAVBAR -->
-    <?php require_once '/var/www/WebMarketTest/views/administrador/menus/navbar/navbar.php' ?>
+    <?php require '../../menus/navbar/navbar.php' ?>
     <!-- NAVBAR -->
 
     <div class="container-fluid">
         <div class="row">
 
             <!-- LEFT SIDEBAR -->
-            <?php require_once '/var/www/WebMarketTest/views/administrador/menus/left-sidebar/left-sidebar.php' ?>
+            <?php require '../../menus/left-sidebar/left-sidebar.php' ?>
             <!-- LEFT SIDEBAR -->
 
 
             <!-- CONTENT PAGE -->
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Productos</h1>
+
+                    <h1 class="h2">Comprar Productos</h1>
+
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Pistolear Producto</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="codigo de barra"
+                                aria-label="codigo de barra" aria-describedby="basic-addon1" id="codigoBarraShooted">
+                            <button class="btn btn-primary" id="codigoBarraShoot" >Agregar</button>
+                        </div>
+                    </div>
+
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#agregarModal">
                                 Agregar Producto
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">BUTTON</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">ALGO</button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                            <span data-feather="calendar"></span>
-                            FILTRO
-                        </button>
                     </div>
+
                 </div>
 
-                <div class="table-responsive">
+                <form class="mt-5">
+                    
+                    <h1>DATOS DE FACTURA</h1>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                            else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+                <div class="table-responsive mt-5">
 
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col" id="thID">#</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Precio</th>
                                 <th scope="col">Codigo de Barra</th>
                                 <th scope="col">Categoria</th>
                                 <th scope="col">Empresa</th>
                                 <th scope="col">Cantidad</th>
+                                <th scope="col"> <span data-feather="edit"> </span> </th>
+                                <th scope="col"> <span data-feather="trash-2"></span> </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php foreach($this->productos as $producto):?>
-                            <tr>
-                                <td><?php echo $producto->idProducto;?></td>
-                                <td><?php echo $producto->nombre;?></td>
-                                <td><?php echo $producto->precio;?></td>
-                                <td><?php echo $producto->codigodebarra;?></td>
-                                <td><?php echo $producto->categoria;?></td>
-                                <td><?php echo $producto->empresa;?></td>
-                                <td><?php echo $producto->stock;?></td>
-                                <td>    
-                                    <button class='btn btn-default btn-sm editProduct' data-product-id="<?php echo $producto->idProducto;?>">
-                                        <a data-feather="edit"></a>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class='btn btn-default btn-sm deleteProduct' data-product-id="<?php echo $producto->idProducto;?>">
-                                        <span data-feather="trash-2"></span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                        <tbody id="table">
+
                         </tbody>
                     </table>
+
                 </div>
+
             </main>
             <!-- CONTENT PAGE -->
 
-            <!-- Modal Agregar -->
-            <?php require '/var/www/WebMarketTest/views/administrador/producto/modales/agregar-producto.php' ?>
-            <!-- Modal Agregar -->
+            <!-- Modal Agregar-->
+            <?php require '../modales/agregar-producto.php' ?>
+            <!-- Modal Agregar-->
 
             <!-- Modal Modificar-->
-            <?php require '/var/www/WebMarketTest/views/administrador/producto/modales/modificar-producto.php' ?>
+            <?php require '../modales/modificar-producto.php' ?>
             <!-- Modal Modificar-->
 
         </div>
@@ -118,8 +134,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
-    <script src="../../js/administrador/main.js"></script>
-    <script src="../../js/administrador/producto/productos.js"></script>
+    <script src="../../../js/administrador/producto/productos.js"></script>
+    <script src="../../../js/administrador/producto/comprar.js"></script>
 
 </body>
 

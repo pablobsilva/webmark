@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
     let editProducts = document.getElementsByClassName('editProduct');
+    let deleteProducts = document.getElementsByClassName('deleteProduct');
 
-    editProducto.addEventListener('click', obtenerProductoInput);
+    editProducts.addEventListener('click', obtenerProductoInput);
+    deleteProducts.addEventListener('click', eliminarProducto);
 
     setEventOnEditProduct(editProducts);
 
@@ -36,6 +38,28 @@ function obtenerProducto(idProducto, functionExecute) {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             functionExecute(xhttp.responseText);
+        }
+    };
+
+    xhttp.send(parametros);
+
+}
+
+function eliminarProducto() {
+
+    let idProducto = this.getAttribute("data-product-id");
+
+    let methodHTTP = 'POST';
+    let url = '';
+    let parametros = 'id=' + idProducto;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open( methodHTTP, url, true );
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhttp.responseText);
         }
     };
 
