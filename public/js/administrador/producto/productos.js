@@ -4,12 +4,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let deleteProducts = document.getElementsByClassName('deleteProduct');
 
     setEventOnEditProduct(editProducts);
+    setEventOnDeleteProduct(deleteProducts);
 
 });
 
 function setEventOnEditProduct(editProducts) {
     for (let i = 0; i < editProducts.length; i++) {
         editProducts[i].addEventListener('click', obtenerProductoInput, false);
+    }
+}
+
+function setEventOnDeleteProduct(deleteProducts) {
+    for (let i = 0; i < editProducts.length; i++) {
+        editProducts[i].addEventListener('click', eliminarProducto, false);
     }
 }
 
@@ -40,6 +47,28 @@ function obtenerProducto(idProducto, functionExecute) {
     };
 
     xhttp.send(parametros);
+}
+
+function eliminarProducto() {
+
+    let idProducto = this.getAttribute("data-product-id");
+
+    let methodHTTP = 'POST';
+    let url = '';
+    let parametros = 'id=' + idProducto;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open( methodHTTP, url, true );
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhttp.responseText);
+        }
+    };
+
+    xhttp.send(parametros);
+
 }
 
 function rellenarModal(producto) {

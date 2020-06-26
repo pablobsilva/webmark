@@ -77,9 +77,11 @@
                                         <a data-feather="edit"></a>
                                     </button>
                                 </td>
-                                <td> <button class='btn btn-default btn-sm deleteProduct' data-product-id="<?php echo $producto->idProducto;?>">
-                                    <a data-feather="trash-2"></a>
-                                    </button></td>
+                                <td>
+                                    <button class='btn btn-default btn-sm deleteProduct' data-product-id="<?php echo $producto->idProducto;?>">
+                                        <span data-feather="trash-2"></span>
+                                    </button>
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
