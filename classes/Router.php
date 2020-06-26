@@ -5,8 +5,9 @@ class Router {
     private $parametros;
     private $rutasRegistradas;
     private $requestMethod;
+    private static $Instance = null;
 
-    public function __construct()
+    private function __construct()
     {
         $this->parametros = array();
         $this->rutasRegistradas = array();
@@ -14,7 +15,17 @@ class Router {
         $this->obtenerRuta();
     }
 
-
+	
+    public static function getInstance()
+    {
+      if (self::$Instance == null)
+      {
+        self::$Instance = new Router();
+      }
+      return self::$Instance;
+    }
+  
+	
     private function obtenerRuta()
     {
         $script = dirname( $_SERVER['SCRIPT_NAME'] ) . '/';
