@@ -38,7 +38,7 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
-                                data-target="#staticBackdrop">
+                                data-target="#agregarModal">
                                 Agregar Producto
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary">BUTTON</button>
@@ -65,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($this->productos as $producto):?>
+                            <?php foreach($this->productos as $producto):?>
                             <tr>
                                 <td><?php echo $producto->idProducto;?></td>
                                 <td><?php echo $producto->nombre;?></td>
@@ -74,7 +74,8 @@
                                 <td><?php echo $producto->categoria;?></td>
                                 <td><?php echo $producto->empresa;?></td>
                                 <td><?php echo $producto->stock;?></td>
-                                <td> <span data-feather="edit"> </span> </td>
+                                <td> <span class='editProduct' data-product-id="<?php echo $producto->idProducto;?>"
+                                        data-feather="edit"> </span> </td>
                                 <td> <span data-feather="trash-2"></span> </td>
                             </tr>
                             <?php endforeach; ?>
@@ -83,9 +84,18 @@
                 </div>
             </main>
             <!-- CONTENT PAGE -->
+<<<<<<< HEAD
             <!-- Modal -->
+=======
+
+            <!-- Modal Agregar -->
+>>>>>>> ff9eadccc86c3b72b1cfd7103242736d2d543997
             <?php require '/var/www/WebMarketTest/views/administrador/producto/modales/agregar-producto.php' ?>
-            <!-- Modal -->
+            <!-- Modal Agregar -->
+
+            <!-- Modal Modificar-->
+            <?php require '/var/www/WebMarketTest/views/administrador/producto/modales/modificar-producto.php' ?>
+            <!-- Modal Modificar-->
 
         </div>
     </div>
