@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../classes/Router.php';
-$router = new Router;
+$router = Router.getInstance();
 
 
 $router->get('', 'HomeController@index'); //redirecciona al dashboard si hay sesión, sino al login para iniciar
