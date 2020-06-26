@@ -63,24 +63,22 @@
                                 <th scope="col">Categoria</th>
                                 <th scope="col">Empresa</th>
                                 <th scope="col">Cantidad</th>
-                                <th scope="col"> <span data-feather="edit"> </span> </th>
-                                <th scope="col"> <span data-feather="trash-2"></span> </th>
                             </tr>
                         </thead>
                         <tbody>
-
+                        <?php foreach($this->productos as $producto):?>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
-                                <td> <input type="number"> </td>
+                                <td><?php echo $producto->idProducto;?></td>
+                                <td><?php echo $producto->nombre;?></td>
+                                <td><?php echo $producto->precio;?></td>
+                                <td><?php echo $producto->codigodebarra;?></td>
+                                <td><?php echo $producto->categoria;?></td>
+                                <td><?php echo $producto->empresa;?></td>
+                                <td><?php echo $producto->stock;?></td>
                                 <td> <span data-feather="edit"> </span> </td>
                                 <td> <span data-feather="trash-2"></span> </td>
                             </tr>
-
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
 

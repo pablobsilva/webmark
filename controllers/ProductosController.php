@@ -11,45 +11,33 @@ class ProductosController extends Controller
 
     public function productos()
     {
-        return $this->view->make('administrador.producto/productos')
-        ->render();
-    }
-
-    public function solicitar($idcategoria = "")
-    {
-        if($idcategoria != "")
-        {
-            require_once '../classes/Conexion.php';
+        require_once '../classes/Conexion.php';
             $db = Conexion::retornar();
             $productos = $db->prepare('SELECT * 
-               FROM Producto 
-               WHERE Categoria_idCategoria = :idCategoria'
-            );
-   
-            $productos->execute(array(
-                ':idCategoria' => $idcategoria
-            ));
-            $listado = $productos->fetchAll();
-
-        }else
-        {
-            require_once '../classes/Conexion.php';
-            $db = Conexion::retornar();
-            $productos = $db->prepare('SELECT * 
-               FROM Producto'
+               FROM productos'
             );
             $productos->execute();
             $productos = $productos->fetchAll();
-            //print_r($productos);
-            //exit;
+
+            $categorias = $db->prepare('SELECT * FROM categorias');
+            $categorias->execute();
+            $categorias = $categorias->fetchAll();
+            $tamaño = count($productos);
+            foreach ($productos as $producto) { 
+                foreach($categorias as $categoria) { 
+                    if($producto->categoria == $categoria->idCategoria)
+                    {
+                        $producto->categoria = $categoria->Nombre;
+                    }
+                }
+            }
             return $this
             ->view
-            ->make('productos.ver')
+            ->make('administrador.producto/productos')
             ->with(array(
                 'productos' => $productos
             ))
             ->render();
-        }
     }
 
     public function FormularioEditar(){
@@ -102,18 +90,20 @@ class ProductosController extends Controller
         $categoria = $_POST["categoria"];
 
         $insert = $db->prepare(
-            "INSERT INTO Producto
+            "INSERT INTO productos
             (
-                nombre, empresa, categoria_idCategoria
+                nombre, precio, empresa, codigodebarra, categoria_idCategoria
             )
              VALUES
             (
-                :nombre, :empresa, :idcategoria
+                :nombre, :precio, :empresa, :codigodebarra, :idcategoria
             )");
 
         $insert = $insert->execute(array(
                 ':nombre' => $nombre,
+                ':precio' => $precio,
                 ':empresa' => $empresa,
+                ':codigodebarra' => $codigodebarra,
                 ':idcategoria' => $categoria,
             ));
         if($insert)
