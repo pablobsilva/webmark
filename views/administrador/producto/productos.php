@@ -74,8 +74,8 @@
                                 <td><?php echo $producto->categoria;?></td>
                                 <td><?php echo $producto->empresa;?></td>
                                 <td><?php echo $producto->stock;?></td>
-                                <td> <span class='editProduct' data-product-id="<?php echo $producto->idProducto;?>"
-                                        data-feather="edit"> </span> </td>
+                                <td> <button class='btn btn-default btn-sm editProduct' data-product-id="<?php echo $producto->idProducto;?>"
+                                        data-feather="edit"> </button> </td>
                                 <td> <span data-feather="trash-2"></span> </td>
                             </tr>
                             <?php endforeach; ?>
