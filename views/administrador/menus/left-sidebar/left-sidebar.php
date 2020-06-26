@@ -30,6 +30,44 @@
             </li>
         </ul>
         <!-- ITEMS -->
+
+        <div class="dropdown-divider"></div>
+
+        <!-- Compra -->
+        <ul class="nav flex-column">
+
+            <li class="nav-item">
+                <a class="nav-link">
+                    COMPRAS <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./comprar/comprar.php">
+                    <span data-feather="shopping-cart"></span>
+                    Productos
+                </a>
+            </li>
+
+        </ul>
+        <!-- Compra -->
+
+        <!-- VENTA -->
+        <ul class="nav flex-column">
+
+            <li class="nav-item">
+                <a class="nav-link">
+                    VENTAS <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="shopping-cart"></span>
+                    Productos
+                </a>
+            </li>
+
+        </ul>
+        <!-- VENTA -->
             
         </div>
       </nav>
