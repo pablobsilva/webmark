@@ -74,8 +74,8 @@
                                 <td><?php echo $producto->categoria;?></td>
                                 <td><?php echo $producto->empresa;?></td>
                                 <td><?php echo $producto->stock;?></td>
-                                <td> <button class='btn btn-default btn-sm editProduct' data-product-id="<?php echo $producto->idProducto;?>"
-                                        data-feather="edit"> </button> </td>
+                                <td> <span class='editProduct' data-product-id="<?php echo $producto->idProducto;?>"
+                                        data-feather="edit"> </span> </td>
                                 <td> <span data-feather="trash-2"></span> </td>
                             </tr>
                             <?php endforeach; ?>
@@ -84,12 +84,8 @@
                 </div>
             </main>
             <!-- CONTENT PAGE -->
-<<<<<<< HEAD
-            <!-- Modal -->
-=======
 
             <!-- Modal Agregar -->
->>>>>>> ff9eadccc86c3b72b1cfd7103242736d2d543997
             <?php require '/var/www/WebMarketTest/views/administrador/producto/modales/agregar-producto.php' ?>
             <!-- Modal Agregar -->
 
