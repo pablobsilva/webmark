@@ -9,6 +9,12 @@ class ProductosController extends Controller
        // $this->middleware('login');
     }
 
+    public function comprar()
+    {
+        return $this->view->make('administrador.producto/comprar/comprar')
+        ->render();
+    }
+
     public function productos()
     {
         require_once '../classes/Conexion.php';
@@ -313,10 +319,18 @@ class ProductosController extends Controller
         //echo "<script>console.log( 'Debug Objects: " . $request->codigodebarra . "' );</script>";
         $producto = $db->prepare("SELECT * FROM productos WHERE codigodebarra = :codigodebarra");
         $producto->execute(array(
-            ':codigodebarra' => $request->codigodebarra,
+            ':codigodebarra' => $request->id,
         ));
-        $producto = $producto->fetch();
-        echo json_encode($producto);
+        if($producto)
+        {
+            $producto = $producto->fetch();
+            echo json_encode($producto);
+        }
+        else
+        {
+            echo json_encode($producto);
+        }
+        
     }
 
 

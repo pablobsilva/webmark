@@ -18,7 +18,7 @@ $router->get('dashboard', 'UsuariosController@indexAdmin'); // dashboard admin
 $router->get('productos', 'ProductosController@productos'); // ver todos los productos
 
 $router->get('gestionar', 'SolicitudesController@gestionar');
-$router->get('ventas/vender', 'VentasController@solicitar');
+$router->get('productos/comprar', 'ProductosController@comprar');
 $router->get('solicitudes/cuentas', 'VentasController@verCuentas');
 $router->get('productos/ver', 'ProductosController@solicitar');
 $router->get('productos/agregar','ProductosController@FormularioAgregar');

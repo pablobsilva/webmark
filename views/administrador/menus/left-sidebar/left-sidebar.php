@@ -42,7 +42,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./comprar/comprar.php">
+                <a class="nav-link" href=<?php echo url('productos/comprar')?>>
                     <span data-feather="shopping-cart"></span>
                     Productos
                 </a>

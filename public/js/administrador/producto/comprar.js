@@ -2,13 +2,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     let codigoBarraShoot = document.getElementById('codigoBarraShoot');
 
-    producto = {}
-    producto.nombre = 'za';
-    producto.precio = 12;
-    producto.codigoBarra = '121';
-    producto.categoria = '12';
-    producto.empresa = 'asdasd';
-    producto.cantidad = 12;
 
     let createTD = (value) => {
         let td = document.createElement('td');
@@ -33,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     let searchProduct = function (idProducto) {
         let methodHTTP = 'POST';
-        let url = '';
+        let url = 'codigodebarra';
         let parametros = 'id=' + idProducto;
 
         var xhttp = new XMLHttpRequest();
@@ -45,21 +38,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
                 let producto = JSON.parse(xhttp.responseText)
 
-                if (producto != {}) {
-                    llenarTabla(producto);
-                } else {
+                if (producto == false) {
                     $('#agregarModal').modal();
+                } else {
+                    llenarTabla(producto);
                 }
-
             }
         };
-
         xhttp.send(parametros);
     }
 
     let eventCodigoBarraShooted = function () {
         let codigoBarraShooted = document.getElementById('codigoBarraShooted');
-        let id = codigoBarraShooted.innerText;
+        let id = codigoBarraShooted.value;
         searchProduct(id)
     }
 

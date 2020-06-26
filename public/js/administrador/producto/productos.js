@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     let editProducts = document.getElementsByClassName('editProduct');
     let deleteProducts = document.getElementsByClassName('deleteProduct');
-
+    feather.replace()
     setEventOnEditProduct(editProducts);
     setEventOnDeleteProduct(deleteProducts);
 
@@ -40,9 +40,10 @@ function obtenerProducto(idProducto, functionExecute) {
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            functionExecute(xhttp.responseText);
-            console.log(xhttp.responseText);
+        if (producto != false) {
+            llenarTabla(producto);
+        } else {
+            $('#agregarModal').modal();
         }
     };
 
