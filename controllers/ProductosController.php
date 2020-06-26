@@ -174,7 +174,6 @@ class ProductosController extends Controller
         $delete = $delete->execute(array(
             ':idproducto' => $idproducto,
         ));
-        print $delete;
         if($delete)
         {
             return $this->redirect('productos');

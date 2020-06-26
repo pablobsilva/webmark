@@ -66,22 +66,15 @@
                     <h1>DATOS DE FACTURA</h1>
 
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <label for="exampleInputEmail1">Fecha</label>
+                        <input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Check me out</label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
 
+                    <button type="submit" class="btn btn-primary">Registrar</button>
                 <div class="table-responsive mt-5">
 
                     <table class="table table-striped">
@@ -92,17 +85,16 @@
                                 <th scope="col">Precio</th>
                                 <th scope="col">Codigo de Barra</th>
                                 <th scope="col">Categoria</th>
-                                <th scope="col">Empresa</th>
                                 <th scope="col">Cantidad</th>
                                 <th scope="col"> <span data-feather="edit"> </span> </th>
                                 <th scope="col"> <span data-feather="trash-2"></span> </th>
                             </tr>
                         </thead>
                         <tbody id="table">
-
+                        
                         </tbody>
                     </table>
-
+                </form>
                 </div>
 
             </main>

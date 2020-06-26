@@ -9,16 +9,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
         return td;
     }
 
+    let indice = 0;
+    let cantidad = 1;
+
     let llenarTabla = (producto) => {
 
         let table = document.getElementById('table');
         let tr = document.createElement('tr');
 
+        tr.appendChild(createTD(indice+=1))
         tr.appendChild(createTD(producto.nombre))
         tr.appendChild(createTD(producto.precio))
-        tr.appendChild(createTD(producto.codigoBarra))
+        tr.appendChild(createTD(producto.codigodebarra))
         tr.appendChild(createTD(producto.categoria))
-        tr.appendChild(createTD(producto.cantidad))
+        tr.appendChild(createTD(cantidad))
 
         table.appendChild(tr);
 
@@ -41,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 if (producto == false) {
                     $('#agregarModal').modal();
                 } else {
+                    
                     llenarTabla(producto);
                 }
             }

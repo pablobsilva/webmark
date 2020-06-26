@@ -37,6 +37,12 @@
                             <form method="POST" action="<?php echo url ('auth/registrar')?>" class="row mt-5">
 
                                 <div>
+                                    <h1> <label for="basic-url">Ingrese su nombre:</label> </h1>
+                                    <div class="input-group input-group-lg mb-3">
+                                        <input type="text" class="form-control" name="nombre"
+                                        aria-describedby="basic-addon3">
+                                    </div>
+                                <div>
                                     <h1> <label for="basic-url">Ingrese su rut:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
                                         <input type="text" class="form-control" name="rut"
@@ -47,16 +53,14 @@
                                 <div>
                                     <h1> <label for="basic-url">ingrese su contrasena:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
-                                        <input type="text" class="form-control" id="basic-url"
+                                        <input type="text" class="form-control" id="basic-url" name="password"
                                         aria-describedby="basic-addon3">
                                     </div>
-                                </div>
-
-                               
+                                </div>                            
                                 
                                 <button type="submit" class="btn btn-light btn-lg btn-block">Registrarse</button>
                                 <button type="button" class="btn btn-secondary btn-lg btn-block" style="background-color: orangered !important;">
-                                    <a href="./login.html">Iniciar Sesion</a>
+                                    <a href="<?php echo url('auth/login') ?>">Iniciar Sesion</a>
                                 </button>
 
                             </form>

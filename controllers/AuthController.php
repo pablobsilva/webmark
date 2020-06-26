@@ -35,7 +35,7 @@ class AuthController extends Controller
             $db = Conexion::retornar();
             $usuarios = $db
             ->prepare('SELECT * FROM usuarios
-                WHERE nombre = :usuario 
+                WHERE rut = :usuario 
                 AND pass = :clave'
             );
             $usuarios->execute(array(
@@ -67,10 +67,11 @@ class AuthController extends Controller
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $rut = $_POST["rut"];
-        $nombre = $_POST["nombre"];
-        $pass = $_POST["password"];
-        $tipousuario = $_POST["tipo-usuario"];
+        $request = $this->request;
+        $rut = $request->rut;
+        $nombre = $request->nombre;
+        $pass = $request->password;
+        $tipousuario = 1;
         $insert = $db->prepare(
             "INSERT INTO Usuario 
             (

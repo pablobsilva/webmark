@@ -39,11 +39,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Empresa</label>
-                        <input type="text" class="form-control" id="empresaModificar" name="empresa">
-                    </div>
-
-                    <div class="form-group">
                         <label for="exampleInputPassword1">Stock</label>
                         <input type="text" class="form-control" id="cantidadModificar" name="stock">
                     </div>

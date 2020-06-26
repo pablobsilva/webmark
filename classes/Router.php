@@ -12,8 +12,9 @@ class Router {
         $this->rutasRegistradas = array();
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
         $this->obtenerRuta();
-
     }
+
+
     private function obtenerRuta()
     {
         $script = dirname( $_SERVER['SCRIPT_NAME'] ) . '/';

@@ -40,10 +40,9 @@ function obtenerProducto(idProducto, functionExecute) {
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     xhttp.onreadystatechange = function() {
-        if (producto != false) {
-            llenarTabla(producto);
-        } else {
-            $('#agregarModal').modal();
+        if (this.readyState == 4 && this.status == 200) {
+            functionExecute(xhttp.responseText);
+            console.log(xhttp.responseText);
         }
     };
 
@@ -68,11 +67,10 @@ function eliminarProducto() {
         }
     };
     xhttp.send(parametros);
-
 }
 
 function rellenarModal(producto) {
-
+    
     let id = document.getElementById('idModificar');
     let nombre = document.getElementById('nombreModificar');
     let precio = document.getElementById('precioModificar');
@@ -86,7 +84,6 @@ function rellenarModal(producto) {
     nombre.value = producto.nombre;
     precio.value = producto.precio;
     codigoBarra.value = producto.codigodebarra;
-    empresa.value = producto.empresa;
     cantidad.value = producto.stock;
 
     for (i = 0; i < categoria.length; i++) {
