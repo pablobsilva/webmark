@@ -21,10 +21,3 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 
-/*TEST
-
-document.getElementById("btn-producto").addEventListener("click", function(e){
-    axios.get('productos/codigodebarra').then(function(respuesta){
-        console.log(respuesta.data);
-    });
-});*/

@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let id = codigoBarraShooted.value;
         searchProduct(id)
     }
-
     codigoBarraShoot.addEventListener('click', eventCodigoBarraShooted)
 
 });

@@ -10,8 +10,17 @@ class ProductosController extends Controller
     }
 
     public function comprar()
-    {
-        return $this->view->make('administrador.producto/comprar/comprar')
+    {   require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $categorias = $db->prepare('SELECT * FROM categorias');
+        $categorias->execute();
+        $categorias = $categorias->fetchAll();
+        return $this
+        ->view
+        ->make('administrador.producto/comprar/comprar')
+        ->with(array(
+            'categorias' => $categorias,
+        ))
         ->render();
     }
 
