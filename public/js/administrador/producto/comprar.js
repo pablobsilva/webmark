@@ -37,20 +37,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
         xhttp.open(methodHTTP, url, true);
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-
-                let producto = JSON.parse(xhttp.responseText)
-
-                if (producto == false) {
-                    $('#agregarModal').modal();
-                } else {
-                    
-                    llenarTabla(producto);
-                }
-            }
-        };
+        xhttp.onreadystatechange = isProductFindIt();
         xhttp.send(parametros);
+    }
+
+    let isProductFindIt = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+            let producto = JSON.parse(xhttp.responseText)
+
+            if (producto == false) {
+                $('#agregarModal').modal();
+            } else {
+            
+                llenarTabla(producto);
+            }
+        }
     }
 
     let eventCodigoBarraShooted = function () {
