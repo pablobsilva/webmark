@@ -12,6 +12,9 @@ class Request
 			case 'POST':
 				$this->atributos = $_POST;
 				break;
+			case 'OPTIONS':
+				http_response_code(200);
+				die();	
 		}
 	}
 

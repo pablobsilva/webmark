@@ -1,16 +1,27 @@
 <?php
 
 require_once 'Controller.php';
+
 class ProductosController extends Controller 
 {
-    
+
+
+    /*
+    * @return el resultado de verificar si existe una sesión iniciada en el navegador
+      si existe te deja ingresar a la vista productos, sino te redirecciona al home
+    */
     public function __construct()
     { 
-       // $this->middleware('login');
+        $this->middleware('login');
     }
 
+    /*
+    * @param recbie los datos a traves de la clase request
+    * @return la vista para hacer un registro de compras de productos
+    */
     public function comprar()
-    {   require_once '../classes/Conexion.php';
+    {   
+        require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
         $categorias = $db->prepare('SELECT * FROM categorias');
         $categorias->execute();
@@ -23,41 +34,39 @@ class ProductosController extends Controller
         ))
         ->render();
     }
-
+    /*
+    * @return la vista para visualizar todos los productos junto con los datos de los productos y las categorias
+    */
     public function productos()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			http_response_code(200);
+        }
+        $data = json_decode(file_get_contents("php://input"));
         require_once '../classes/Conexion.php';
-            $db = Conexion::retornar();
-            $productos = $db->prepare('SELECT * 
-               FROM productos'
-            );
-            $productos->execute();
-            $productos = $productos->fetchAll();
-
-            $categorias = $db->prepare('SELECT * FROM categorias');
-            $categorias->execute();
-            $categorias = $categorias->fetchAll();
-            $tamaño = count($productos);
-            foreach ($productos as $producto) { 
-                foreach($categorias as $categoria) { 
-                    if($producto->categoria == $categoria->idCategoria)
-                    {
-                        $producto->categoria = $categoria->Nombre;
-                    }
-                }
-            }
-            return $this
-            ->view
-            ->make('administrador.producto/productos')
-            ->with(array(
-                'categorias' => $categorias,
-                'productos' => $productos,
-            ))
-            ->render();
+        $db = Conexion::retornar();
+        $productos = $db->prepare('SELECT productos.idProducto, productos.nombre, productos.precio, productos.codigodebarra, productos.stock, categorias.nombre as categoria
+        FROM productos
+        INNER JOIN categorias ON productos.categoria=categorias.idCategoria
+        WHERE rut_empresa = :rut_empresa'
+        );
+        $productos->execute(
+            array(':rut_empresa' => $data->rut_empresa
+        ));
+        $productos = $productos->fetchAll();
+        echo json_encode(
+            array(
+                "producto" => $productos,
+            )
+        );
     }
 
-    public function FormularioEditar(){
+    /*
+    * @return la información necesaria para el formulario editar
+    */
 
+    public function FormularioEditar()
+    {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
         $categorias = $db->prepare('SELECT * FROM Categoria');
@@ -78,80 +87,73 @@ class ProductosController extends Controller
         ))
         ->render();
     }
-
-
-    public function productoPorId()
-    {
-        require_once '../classes/Conexion.php';
-        $db = Conexion::retornar();
-        $request = $this->request;
-        $id = $request->id;
-        //print "id: ".$id;
-        $producto = $db->prepare('SELECT * FROM productos WHERE idProducto = :id');
-        $producto->execute(array(
-            ':id'=> $id
-        ));
-        
-        $producto = $producto->fetch();
-        
-       /* $seleccionado = new stdClass();
-        $seleccionado->nombre = $producto->nombre;
-        $seleccionado->precio = $producto->precio;
-        $seleccionado->codigodebarra = $producto->codigodebarra;
-        $seleccionado->stock = $producto->stock;
-        $seleccionado->categoria = $producto->categoria;
-        $seleccionados[] = $seleccionado;
-       // print_r($seleccionado);*/
-        echo json_encode($producto);
-    }
-
+    /*
+     *@param todos los parametros son rescatados por la clase request
+     *@return el resultado de la inserción de la información a la base de datos, si es exitosa te redirecciona a la vista de productos denuevo
+    */
     public function AgregarProducto()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			http_response_code(200);
+		}
+        $data = json_decode(file_get_contents("php://input"));
+        $empresa = $data->rut_empresa;
+        $producto = $data->producto;
+        $nombre = $producto->nombre;
+        $precio = $producto->precio;
+        $codigodebarra = $producto->codigodebarra;
+        $categoria = $producto->categoria;
+        $stock = $producto->stock;
+
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $request = $this->request;
-        $nombre = $request->nombre;
-        $precio = $request->precio;
-        $codigodebarra = $request->codigodebarra;
-        $empresa = $_SESSION['auth']['nombre'];
-        $categoria = $request->categoria;
-        $stock = $request->stock;
 
-        $insert = $db->prepare(
-            "INSERT INTO productos
+        $insert = $db->prepare( 
+            'INSERT INTO productos
             (
-                nombre, precio, empresa, codigodebarra, categoria, stock
+                nombre, precio, codigodebarra, stock, categoria, rut_empresa 
             )
              VALUES
             (
-                :nombre, :precio, :empresa, :codigodebarra, :idcategoria, :stock
-        )");
+                :nombre, :precio, :codigodebarra, :stock, :idcategoria, :rut_empresa
+        )');
 
         $insert = $insert->execute(array(
                 ':nombre' => $nombre,
                 ':precio' => $precio,
-                ':empresa' => $empresa,
                 ':codigodebarra' => $codigodebarra,
-                ':idcategoria' => $categoria,
                 ':stock' => $stock,
-            ));
+                ':rut_empresa' => $empresa,
+                ':idcategoria' => $categoria,
+        ));
         if($insert)
         {
-            return $this->redirect('productos');
+            echo json_encode(true);
+        }
+        else
+        {
+            echo json_encode("Error");
         }
     }
-    
+    /*
+     *@param todos los parametros son rescatados por la clase request
+     *@return el producto según su id, ya sea para poder editarlo o para eliminarlo
+    */
     public function EditarProducto()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			http_response_code(200);
+		}
+        $data = json_decode(file_get_contents("php://input"));
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $request = $this->request;
-        $idproducto = $request->id;
-        $nombre = $request->nombre;
-        $precio = $request->precio;
-        $codigodebarra = $request->codigodebarra;
-        $categoria = $request->categoria;
-        $stock = $request->stock;
+        $producto = $data->producto;
+        $idproducto = $producto->idProducto;
+        $nombre = $producto->nombre;
+        $precio = $producto->precio;
+        $codigodebarra = $producto->codigodebarra;
+        $categoria = $producto->categoria;
+        $stock = $producto->stock;
         $insert = $db->prepare(
             "UPDATE productos
             
@@ -169,26 +171,43 @@ class ProductosController extends Controller
         ));
         if($insert)
         {
-            return $this->redirect('productos');
+            echo json_encode(true);
+        }
+        else
+        {
+            echo json_encode("Error al editar");
         }
     }
-
+    /*
+     *@param todos los parametros son rescatados por la clase request
+     *@return el resultado de si un producto es eliminado, si es exitosa la eliminacion te redirige a la vista productos
+    */
     public function EliminarProducto()
     {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			http_response_code(200);
+		}
+        $data = json_decode(file_get_contents("php://input"));
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $request = $this->request;
-        $idproducto = $request->id;    
+        $idproducto = $data->idProducto;    
         $delete = $db ->prepare("DELETE FROM productos WHERE idProducto = :idproducto");
         $delete = $delete->execute(array(
             ':idproducto' => $idproducto,
         ));
         if($delete)
         {
-            return $this->redirect('productos');
+            echo json_encode(true);
+        }
+        else
+        {
+            echo json_encode("Error al eliminar");
         }
     }
-
+    /*
+     *@param todos los parametros son rescatados por POST
+     *@return el resultado de la inserción de información a la tabla stock
+    */
     public function AgregarStock()
     {
         require_once '../classes/Conexion.php';
@@ -226,7 +245,10 @@ class ProductosController extends Controller
             return $this->redirect('/');
         }
     }
-
+    /*
+     *@param todos los parametros son rescatados por POST
+     *@return el resultado de la inserción a la tabla compras y detalle_compras
+    */
     public function RegistrarCompra()
     {
         require_once '../classes/Conexion.php';
@@ -234,9 +256,6 @@ class ProductosController extends Controller
         $cantidades = $_POST["cantidades[]"];
         $distribuidor = $_POST["distribuidor"];
         $idproductos = $_POST["idproductoscompra[]"];
-        //$cantidades = array("2","3");
-        //$idproductos = array("1","4");
-        //$distribuidor = "carlos pinto";
         $longitud = count($idproductos);
         $idcompra = $db->prepare(
             "SELECT MAX(idCompra) AS idCompra FROM compras"
@@ -318,29 +337,46 @@ class ProductosController extends Controller
             return $this->redirect('/');
         }
     }
-
+    /*
+     *@param todos los parametros son rescatados por request
+     *@return el resultado de la consulta a la tabla productos, si es exitosa devuelve los datos del producto por su codigo de barra
+    */
     public function ProductoPorCodigoBarra()
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $request = $this->request;
-        //echo "<script>console.log( 'Debug Objects: " . $request->codigodebarra . "' );</script>";
-        $producto = $db->prepare("SELECT * FROM productos WHERE codigodebarra = :codigodebarra");
+        $data = json_decode(file_get_contents("php://input"));
+        $producto = $db->prepare("SELECT * FROM productos WHERE codigodebarra = :codigodebarra AND rut_empresa = :rut_empresa" );
         $producto->execute(array(
-            ':codigodebarra' => $request->id,
+            ':codigodebarra' => $data->codigodebarra,
+            ':rut_empresa' => $data->rut_empresa
+        ));
+        if($producto)
+        {
+            $producto = $producto->fetch();
+            echo json_encode(array(
+                'resultado' => true,
+                'producto' => $producto,
+            ));
+        }
+    }
+
+    public function ProductoPorId()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+			http_response_code(200);
+		}
+        $data = json_decode(file_get_contents("php://input"));
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $producto = $db->prepare("SELECT * FROM productos WHERE idProducto  = :id");
+        $producto->execute(array(
+            ':id' => $data->idProducto,
         ));
         if($producto)
         {
             $producto = $producto->fetch();
             echo json_encode($producto);
         }
-        else
-        {
-            echo json_encode($producto);
-        }
-        
     }
-
-
 }
-

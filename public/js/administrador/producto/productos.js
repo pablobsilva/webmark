@@ -95,7 +95,7 @@ function rellenarModal(producto) {
     $('#modificarModal').modal();
 }
 
-function deleteProduct()
+function token()
 {
-
+    
 }

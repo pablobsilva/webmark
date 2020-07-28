@@ -10,6 +10,11 @@ class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-cente
             <span data-feather="calendar"></span>
             This week
         </button>
+        <form method="POST" action=<?php echo url ('auth/token')?>>
+        <input type="hidden" class="form-control" id="basic-url" required name="jwt" value=<?php echo $this->jwt?>>
+       
+        <button type="submit" class="btn btn-light btn-lg btn-block">Verificar</button>
+       </form>
     </div>
 </div>
 

@@ -19,9 +19,7 @@
 
         <article class="col-sm-12 col-md-8 col-lg-8 vh-100">
             <div class="d-flex justify-content-center vh-100 align-items-center">
-                
                 <div style="width: 60%; height: 80%;" class="d-flex align-items-center">
-                    
                     <div class="card text-black mb-3">
                         <div class="card-body">
                             <h1 class="card-title text-center mb-5">Ingrese sus datos, y sea bienvenido a nuestra comunidad!</h1>
@@ -35,7 +33,6 @@
                             </form> --> 
 
                             <form method="POST" action="<?php echo url ('auth/registrar')?>" class="row mt-5">
-
                                 <div>
                                     <h1> <label for="basic-url">Ingrese su nombre:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
@@ -49,43 +46,37 @@
                                         aria-describedby="basic-addon3">
                                     </div>
                                 </div>
-                                
                                 <div>
                                     <h1> <label for="basic-url">ingrese su contrasena:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
-                                        <input type="text" class="form-control" id="basic-url" name="password"
+                                        <input type="password" class="form-control" id="basic-url" name="password"
                                         aria-describedby="basic-addon3">
                                     </div>
                                 </div>                            
-                                
                                 <button type="submit" class="btn btn-light btn-lg btn-block">Registrarse</button>
                                 <button type="button" class="btn btn-secondary btn-lg btn-block" style="background-color: orangered !important;">
                                     <a href="<?php echo url('auth/login') ?>">Iniciar Sesion</a>
                                 </button>
-
                             </form>
                         </div>
                     </div>
-                    
                 </div>
-                
             </div>
         </article>
         
         <article class="col-sm-12 col-md-4 col-lg-4 vh-100 d-flex justify-content-center">
             <div class="row row-cols-sm-1 row-cols-md-1 vh-100" style="width: 80%;">
                 <div style="width: 100%; height: 40%; background-color: orangered;">
-                    <img src="" alt="AQUI DEBERIA IR UNA IMAGEN">
+                    <img src="/assets/home/login/PYMES-1.png" alt="AQUI DEBERIA IR UNA IMAGEN">
                 </div>
                 <div style="width: 100%; height: 20%; display: flex; justify-content: center; align-items: center; background-color: #f4f4f6 !important;">
                     <h1>TODO COMIENZA AHORA!</h1>
                 </div>
                 <div style="width: 100%; height: 40%; background-color: orangered;">
-                    <img src="" alt="AQUI DEBERIA IR UNA IMAGEN">
+                    <img src="/assets/home/login/PYMES-1.png" alt="AQUI DEBERIA IR UNA IMAGEN">
                 </div>
             </div>
         </article>
-
     </main>
     
     <!-- Optional JavaScript -->

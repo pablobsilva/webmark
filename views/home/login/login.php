@@ -48,7 +48,7 @@
                                 <div>
                                     <h1> <label for="basic-url">Rut:</label> </h1>
                                     <div class="input-group input-group-lg mb-3">
-                                        <input type="text" class="form-control" id="basic-url" required name="usuario"
+                                        <input type="text" class="form-control" id="basic-url" required name="rut"
                                             aria-describedby="basic-addon3">
                                     </div>
                                 </div>
@@ -66,17 +66,12 @@
                                     style="background-color: orangered !important;">
                                     <a href=<?php echo url("auth/registrarse")?>>Registrarse</a>
                                 </button>
-
                             </form>
-
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </article>
-
     </main>
 
     <!-- Optional JavaScript -->

@@ -7,7 +7,7 @@ class Router {
     private $requestMethod;
     private static $Instance = null;
 
-    private function __construct()
+    private function __construct() // constructor
     {
         $this->parametros = array();
         $this->rutasRegistradas = array();
@@ -15,8 +15,7 @@ class Router {
         $this->obtenerRuta();
     }
 
-	
-    public static function getInstance()
+    public static function getInstance() //metodo para obtener una instancia del objeto Router
     {
       if (self::$Instance == null)
       {
@@ -24,13 +23,14 @@ class Router {
       }
       return self::$Instance;
     }
-  
-	
-    private function obtenerRuta()
+
+    private function obtenerRuta()  //Metodo obtener rutas para guardar en el array parametros todas las rutas registradas en el index. 
     {
+        //devuelve la ruta actual
         $script = dirname( $_SERVER['SCRIPT_NAME'] ) . '/';
-        //$_SERVER[SCRIPT_NAME]: /index.php
-		//$script = //
+        //$_SERVER[SCRIPT_NAME]: /index.php        
+        //$script = // 
+        
         $request = str_replace( $script, '', $_SERVER['REQUEST_URI'] );
         //$_SERVER[REQUEST_URI] = /auth/login
 		//$request = /auth/login
@@ -56,17 +56,8 @@ class Router {
             $this->parametros = $request;
     }
 
-    public function debug_to_console($data) {
-        $output = $data;
-        if (is_array($output))
-            $output = implode(',', $output);
-    
-        //echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-    }
-
     public function get( $ruta, $controller )
     {
-        $this->debug_to_console($this->parametros);
         //print( '<br>' );
        // print( '|ruta: '.$ruta.'|Controller: '. $controller );
         //ruta: auth/login
@@ -158,6 +149,11 @@ class Router {
     public function response()
     {
         print $this->direccionar();
+    }
+
+    public function options( $ruta, $controller )
+    {
+        $this->rutasRegistradas['OPTIONS'][$ruta] = $controller;
     }
 
 }

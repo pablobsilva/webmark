@@ -1,7 +1,7 @@
 <?php
 require_once 'Controller.php';
 
-class HomeController extends Controller
+class CategoriasController extends Controller
 {
 	public function __construct()
 	{
@@ -56,7 +56,7 @@ class HomeController extends Controller
         $select = $select->fetchAll();
         if($select)
         {
-            json_encode($select);
+            echo json_encode($select);
         }           
     }
 }
