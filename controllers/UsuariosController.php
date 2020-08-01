@@ -5,30 +5,7 @@ class UsuariosController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('login');
-    }
-
-    public function FormularioRegistrarPersonal()
-    {
-        return $this->view->make('auth.registrarpersonal')
-        ->render();
-    }
-
-    public function indexAdmin()
-    {
-        return $this->view->make('administrador.index')
-        ->render();
-    }
-
-    public function navegar()
-    {
-        return $this->view->make('usuario.navegar')
-        ->render();
-    }
-    public function navegarPersonal()
-    {
-        return $this->view->make('personal.navegar')
-        ->render();
+        //$this->middleware('login');
     }
 
     public function verpersonal()
@@ -85,7 +62,7 @@ class UsuariosController extends Controller
         $empresa = $data->empresa;
         $db = Conexion::retornar();
         $existe = $this->exists_empresa($empresa);
-        if(!$existe)
+        if($existe)
         {
             $insert = $db->prepare(
                 "INSERT INTO empresas
@@ -153,16 +130,17 @@ class UsuariosController extends Controller
         $insert = $db->prepare(
             "INSERT INTO usuarios
             (
-                rut, nombre, pass, tipoUsuario, rut_empresa
+                rut, nombres, apellidos, pass, tipoUsuario, rut_empresa
             )
              VALUES
             (
-                :rut, :nombre, :pass, :tipousuario, :rut_empresa
+                :rut, :nombres, :apellidos, :pass, :tipousuario, :rut_empresa
         )");
 
         $insert = $insert->execute(array(
                 ':rut' => $personal->rut,
-                ':nombre' => $personal->nombre,
+                ':nombres' => $personal->nombre,
+                ':apellidos' => $personal->apellidoPaterno." ".$personal->apellidoMaterno,
                 ':pass' => $encrypted,
                 ':tipousuario' => $tipousuario,
                 ':rut_empresa' => $data->rut_empresa
@@ -279,4 +257,141 @@ class UsuariosController extends Controller
             ));
         }
     }
+
+    public function empresaCheck()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $data = json_decode(file_get_contents("php://input"));
+        $rut = $data->rut_empresa;
+        
+        $empresas = $db->prepare(
+            'SELECT * FROM empresas WHERE rut_empresa = :rut_empresa'
+        );
+        $empresas->execute(array(
+            ':rut_empresa' => $rut->rut_empresa
+        ));
+        $empresaX = $empresas->fetch();
+
+        //json_encode("SOY EL YOYO MAXIMO");
+
+        //json_encode($empresa);
+
+        if($empresaX)
+        {
+            echo json_encode(array(
+                'respuesta' => true,
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => false,
+            ));
+        }
+    }
+
+    public function empresaPorRut()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $data = json_decode(file_get_contents("php://input"));
+        $empresa = $db->prepare(
+            "SELECT * FROM empresas WHERE rut_empresa = :rut_empresa"
+        );
+        $empresa->execute(array(
+            ':rut_empresa' => $data->rut_empresa,
+        ));
+        $empresa = $empresa->fetch();
+        if($empresa)
+        {
+            echo json_encode(array(
+                'respuesta' => true,
+                'empresa' => $empresa,
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => false,
+            ));
+        }
+    }
+
+    public function sumarLikes()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $data = json_decode(file_get_contents("php://input"));
+        $like = $db->prepare(
+            "UPDATE empresas SET likes = likes+:likes WHERE rut_empresa = :rut_empresa"
+        );
+        $like = $like->execute(array(
+            ':rut_empresa' => $data->rut_empresa,
+            ':likes' => 1,
+        ));
+        if($like)
+        {
+            echo json_encode(array(
+                'respuesta' => true,
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => false,
+            ));
+        }
+    }
+
+    public function verLikes()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $data = json_decode(file_get_contents("php://input"));
+        $likes = $db->prepare(
+            "SELECT likes FROM empresas WHERE rut_empresa = :rut_empresa"
+        );
+        $likes->execute(array(
+            ':rut_empresa' => $data->rut_empresa
+        ));
+        $likes = $likes->fetch(); 
+        if($likes)
+        {
+            echo json_encode(array(
+                'respuesta' => true,
+                'likes' => $likes,
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => false,
+            ));
+        }
+    }
+
+    public function verEmpresas()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $empresas = $db->prepare(
+            "SELECT * FROM empresas"
+        );
+        $empresas->execute();
+        $empresas = $empresas->fetchAll();
+        if($empresas)
+        {
+            echo json_encode(array(
+                'empresas' => $empresas,
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => "Error al buscar empresas",
+            ));
+        }
+    }
 }
+

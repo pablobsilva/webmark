@@ -54,22 +54,59 @@ $router->options('ventas/registrar','VentasController@RealizarVenta');
 $router->options('ventas/ver','VentasController@VerVentas');
 $router->options('ventas/eliminar','VentasController@eliminarVenta');
 $router->options('ventas/verdetalles','VentasController@ventaPorId');
-
-
-
+$router->options('ventas/dia','VentasController@VerVentasDelDia');
+$router->options('compras/registrar','ComprasController@RegistrarCompra');
+$router->options('compras/ver','ComprasController@VerCompras');
+$router->options('compras/verdetalles','ComprasController@compraPorId');
+$router->options('compras/eliminar','ComprasController@eliminarcompra');
+$router->options('compras/dia','ComprasController@VerComprasDelDia');
+$router->options('distribuidores/ver','SolicitudesController@verDistribuidores');
+$router->options('compras/eliminar','ComprasController@eliminarcompra');
+$router->options('empresa/check','UsuariosController@empresaCheck');
+$router->options('ventas/excell','SolicitudesController@empresaCheck');
+$router->options('empresa','UsuariosController@empresaPorRut');
+$router->options('empresa/sumarlike','UsuariosController@sumarLikes');
+$router->options('empresa/verlikes','UsuariosController@verLikes');
+$router->options('publicidad/empresas','UsuariosController@verEmpresas');
+$router->options('datediff','ProductosController@datediff');
+$router->options('pagos/registrar','SolicitudesController@RegistrarPago');
+$router->options('productos/porvencer','ProductosController@AvisoVencimiento');
+$router->options('personal/ventas','VentasController@ventasPorTrabajador');
+$router->options('pagos/diario','SolicitudesController@verPagosDia');
 
 $router->post('productos', 'ProductosController@productos');
 $router->post('producto', 'ProductosController@ProductoPorId');
+$router->post('productos/porvencer','ProductosController@AvisoVencimiento');
 $router->post('empresa/crear','UsuariosController@updateEmpresa');
 $router->post('personal/obtener','UsuariosController@personalPorRut');
 $router->post('personal/ver','UsuariosController@verpersonal');
 $router->post('personal/update','UsuariosController@updatePersonal');
 $router->post('personal/eliminar','UsuariosController@deletePersonal');
 $router->post('personal/agregar','UsuariosController@agregarPersonal');
+$router->post('personal/ventas','VentasController@ventasPorTrabajador');
 $router->post('ventas/registrar','VentasController@RealizarVenta');
 $router->post('ventas/ver','VentasController@VerVentas');
 $router->post('ventas/eliminar','VentasController@eliminarVenta');
 $router->post('ventas/verdetalles','VentasController@ventaPorId');
+$router->post('ventas/dia','VentasController@VerVentasDelDia');
+$router->post('ventas/excell','SolicitudesController@exportExcel');
+$router->post('compras/registrar','ComprasController@RegistrarCompra');
+$router->post('compras/ver','ComprasController@VerCompras');
+$router->post('compras/verdetalles','ComprasController@verCompraPorId');
+$router->post('compras/eliminar','ComprasController@eliminarcompra');
+$router->post('compras/dia','ComprasController@VerComprasDelDia');
+$router->post('distribuidores/ver','SolicitudesController@verDistribuidores');
+$router->post('deconexion','AuthController@registrarDesconexion');
+$router->post('empresa/check','UsuariosController@empresaCheck');
+$router->post('empresa/sumarlike','UsuariosController@sumarLikes');
+$router->post('empresa/verlikes','UsuariosController@verLikes');
+$router->post('empresa','UsuariosController@empresaPorRut');
+$router->post('datediff','ProductosController@datediff');
+$router->post('pagos/registrar','SolicitudesController@RegistrarPago');
+$router->post('pagos/diario','SolicitudesController@verPagosDia');
+$router->post('publicidad/empresas','UsuariosController@verEmpresas');
+
+
 
 
 $router->response();

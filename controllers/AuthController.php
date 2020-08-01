@@ -47,6 +47,7 @@ class AuthController extends Controller
         $data = json_decode(file_get_contents("php://input"));
         $rut = $data->rut;
         $password = $data->password;
+        $this->registrarInicioSesion($rut);
 
         if(isset($rut))
         {
@@ -79,8 +80,9 @@ class AuthController extends Controller
                     "exp" => $exp + (1800),
                     "data" => array(
                         "rut" => $usuario->rut,
-                        "firstname" => $usuario->nombre,
-                        "tipoUsuario" => $usuario->tipoUsuario,
+                        "nombres" => $usuario->nombres,
+                        "apellidos" => $usuario->apellidos,
+                        "tipoUsuario" => $usuario->tipousuario,
                         "rut_empresa" => $usuario->rut_empresa,
                     )
                  );
@@ -89,9 +91,9 @@ class AuthController extends Controller
                 echo json_encode(
                         array(
                             "jwt" => $jwt,
-                            "tipoUsuario" => $usuario->tipoUsuario,
+                            "tipoUsuario" => $usuario->tipousuario,
                             "rut" => $usuario->rut,
-                            "nombre" => $usuario->nombre,
+                            "nombres" => $usuario->nombres,
                             "rut_empresa" => $usuario->rut_empresa,
                         ));
                 exit;
@@ -126,27 +128,36 @@ class AuthController extends Controller
         $data = json_decode(file_get_contents("php://input"));
         $usuario = $data->usuario;
         $db = Conexion::retornar();
-        $rut = $usuario->rut;
-        $nombre = $usuario->nombre;
         $pass = $usuario->password;
         $encrypted = md5($pass);
-        $tipousuario = $usuario->tipoUsuario;
         $insert = $db->prepare(
             "INSERT INTO usuarios 
             (
-                rut, nombre, pass, tipoUsuario
+                rut, nombres, apellidos, pass, tipousuario
             )
              VALUES
             (
-                :rut, :nombre, :pass, :tipousuario
+                :rut, :nombres, :apellidos, :pass, :tipousuario
             )");
-
+            
         $insert = $insert->execute(array(
-                ':rut' => $rut,
-                ':nombre' => $nombre,
+                ':rut' => $usuario->rut,
+                ':nombres' => $usuario->nombres,
+                ':apellidos' => $usuario->apellidos,
                 ':pass' => $encrypted,
-                ':tipousuario' => $tipousuario,
-        )); 
+                ':tipousuario' => $usuario->tipoUsuario
+        ));
+        
+        $empleado = $db->prepare(
+            "INSERT INTO personal
+            (
+                rut, nombre, apellidoPaterno, rut_empresa
+            )
+            VALUES
+            (
+                :rut, :nomnre, :apellidoPaterno, :apellidoMaterno, :rut_empresa
+            )"
+        );
         if($insert)
         {
             echo json_encode(true);
@@ -155,21 +166,6 @@ class AuthController extends Controller
         {
             echo json_encode("Error al registrar");
         }       
-    }
-    /*
-    * Este metodo se encarga de eliminar la variable auth de la session del cliente
-    * @return la vista home después de eliminar la sesión activa del usuario
-    */
-    public function logout()
-	{
-		unset($_SESSION['auth']);
-		return $this->redirect('/');
-    }
-    
-    public function eslip()
-    {
-        sleep(15);
-        echo "hola";
     }
 
     public function usuarioPorRut()
@@ -255,4 +251,60 @@ class AuthController extends Controller
             exit;
         }
     }
+
+    public function registrarInicioSesion($rutusuario)
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        date_default_timezone_set('America/Santiago');
+        $date = date('Y-m-d', time());
+        $hora = date('H:i:s', time());
+        $data = json_decode(file_get_contents("php://input"));
+        $log = $db->prepare(
+            "INSERT INTO logs
+            (
+                fecha, hora, accion, rut_usuario
+            ) 
+            VALUES
+            (
+                :fecha, :hora, :accion, :rut_usuario
+            )"
+        );
+        $log = $log->execute(array(
+            ':fecha' => $date,
+            ':hora' => $hora,
+            ':accion' => "inició sesión",
+            ':rut_usuario' => $rutusuario,
+        ));
+
+    }
+
+    public function registrarDesconexion()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        date_default_timezone_set('America/Santiago');
+        $data = json_decode(file_get_contents("php://input"));
+        $date = date('Y-m-d', time());
+        $hora = date('H:i:s', time());
+        $data = json_decode(file_get_contents("php://input"));
+        $log = $db->prepare(
+            "INSERT INTO logs
+            (
+                fecha, hora, accion, rut_usuario
+            ) 
+            VALUES
+            (
+                :fecha, :hora, :accion, :rut_usuario
+            )"
+        );
+        $log = $log->execute(array(
+            ':fecha' => $date,
+            ':hora' => $hora,
+            ':accion' => "Desconexión",
+            ':rut_usuario' => $data->rut,
+        ));
+    }
+
 }
+

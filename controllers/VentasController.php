@@ -9,15 +9,6 @@ class VentasController extends Controller
        $this->middleware('login');
     }
 
-    public function solicitar()
-    {
-        require_once '../classes/Conexion.php';
-        $db = Conexion::retornar();
-
-        return $this->view->make('ventas.vender')
-        ->render();
-    }
-
     public function VerVentas()
     {
         require_once '../classes/Conexion.php';
@@ -25,7 +16,10 @@ class VentasController extends Controller
         $data = json_decode(file_get_contents("php://input"));
         if(isset($data->fecha))
         {
-            $ventas = $db->prepare("SELECT * FROM ventas WHERE fecha = :fecha AND rut_empresa = :rut_empresa");
+            $ventas = $db->prepare("SELECT * FROM ventas 
+            WHERE fecha = :fecha 
+            AND rut_empresa = :rut_empresa 
+            ORDER BY date(fecha) desc,hora desc");
             $ventas->execute(array(
                 ':fecha' => $data->fecha,
                 ':rut_empresa' => $data->rut_empresa
@@ -48,7 +42,7 @@ class VentasController extends Controller
         }
         else
         {
-            $ventas = $db->prepare("SELECT * FROM ventas WHERE rut_empresa = :rut_empresa");
+            $ventas = $db->prepare("SELECT * FROM ventas WHERE rut_empresa = :rut_empresa ORDER BY date(fecha) desc, hora desc");
             $ventas->execute(array(
                 ':rut_empresa' => $data->rut_empresa
             ));
@@ -70,11 +64,6 @@ class VentasController extends Controller
         }
     }
 
-    public function AgregarProductoVenta()
-    {
-
-    }
-
     public function RealizarVenta()
     {
         require_once '../classes/Conexion.php';
@@ -85,9 +74,7 @@ class VentasController extends Controller
         $data = json_decode(file_get_contents("php://input"));
         $productos = $data->productos;
         $productosventa = array();
-
         //INSERT VENTA
-
         $insert_venta = $db->prepare(
             "INSERT INTO ventas
             (
@@ -118,7 +105,7 @@ class VentasController extends Controller
             $productonew->idProducto = $selec->idProducto;
             $productonew->nombre = $selec->nombre;
             $productonew->precio = $selec->precio;
-            $productonew->cantidad = $producto->stock;
+            $productonew->cantidad = $producto->cantidad;
             $productosventa[] = $productonew;
         }
 
@@ -135,6 +122,10 @@ class VentasController extends Controller
             )"
         );
 
+        $update = $db->prepare(
+            "UPDATE productos SET stock = stock-:stock WHERE idProducto = :idproducto"
+        );
+
         $idventa = $db->prepare(
             "SELECT MAX(idVenta) AS idVenta FROM ventas"
         );
@@ -144,7 +135,6 @@ class VentasController extends Controller
         $total = 0;
 
         foreach($productosventa as $productoh) { 
-
             $total = $productoh->precio*$productoh->cantidad;
             $totalfinal = $totalfinal + $total;
             $insert_detalle_venta->execute(array(
@@ -153,6 +143,10 @@ class VentasController extends Controller
                 ':cantidad' => $productoh->cantidad,
                 ':precio' => $total,
                 ':rut_empresa' => $data->rut_empresa,
+            ));
+            $update->execute(array(
+                ':stock' => $productoh->cantidad,
+                ':idproducto' => $productoh->idProducto
             ));
         }
 
@@ -175,23 +169,6 @@ class VentasController extends Controller
         }        
     }
 
-    public function VerCuentaDiaria()
-    {
-        require_once '../classes/Conexion.php';
-        $db = Conexion::retornar();
-        date_default_timezone_set('America/Santiago');
-        $actual = date('Y-m-d', time());
-        //$request = $this->request;
-        $dia = $db->prepare("SELECT * FROM ventas WHERE fecha = :fecha");
-        $dia->execute(array(
-            ':fecha' => $actual
-        ));
-        $dia = $dia->fetchAll();
-        return $this->view->make('ventas.cuentadiaria')->with(array(
-            'cuenta' => $dia,
-        ))
-        ->render();
-    }
 
     public function eliminarVenta()
     {
@@ -218,7 +195,6 @@ class VentasController extends Controller
                 'mensaje_error' => "error al eliminar"
             ));
         }
-
     }
 
     public function ventaPorId()
@@ -227,10 +203,12 @@ class VentasController extends Controller
         $db = Conexion::retornar();
         $data = json_decode(file_get_contents("php://input"));
         $ventas = $db->prepare(
-            'SELECT  productos.idProducto, productos.nombre, productos.codigodebarra, detalles_venta.precio, detalles_venta.cantidad, categorias.Nombre
-            FROM ((productos 
-            INNER JOIN detalles_venta ON productos.idProducto = detalles_venta.idproducto)
-            INNER JOIN categorias ON productos.categoria = categorias.idCategoria)
+            'SELECT  p.idProducto, p.nombre, p.codigodebarra, dv.precio, dv.cantidad, c.nombre as categoria
+            FROM productos p 
+            INNER JOIN detalles_venta dv 
+                ON p.idProducto = dv.idproducto
+            INNER JOIN categorias c
+                ON p.idCategoria = c.idCategoria
             WHERE idventa = :idventa'
         );
         $ventas->execute(array(
@@ -248,9 +226,71 @@ class VentasController extends Controller
         {
             echo json_encode(array(
                 'resultado' => false,
-                'mensaje_error' => "error al eliminar"
+                'mensaje_error' => "error al mostrar venta"
             ));
         }
-
     }
+
+    public function VerVentasDelDia()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $data = json_decode(file_get_contents("php://input"));
+        $fecha = date('Y-m-d', time());
+        $ventas = $db->prepare(
+            'SELECT * FROM ventas WHERE fecha = :fecha AND rut_empresa = :rut_empresa'
+        );
+        $ventas->execute(array(
+            ':rut_empresa' => $data->rut_empresa,
+            ':fecha' => $fecha
+        ));
+        $ventas = $ventas->fetchAll();
+        if($ventas)
+        {
+            echo json_encode(array(
+                'ventas' => $ventas,
+            ));
+        }
+    }
+
+    public function ventasPorTrabajador()
+    {
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $data = json_decode(file_get_contents("php://input"));
+        $personal = $db->prepare(
+            "SELECT * FROM personal WHERE rut_empresa = :rut_empresa"
+        );
+        $personal->execute(array(
+            ':rut_empresa' => $data->rut_empresa
+        ));
+        $personal = $personal->fetchAll();
+
+        foreach($personal as $perso)
+        {
+            $ventas = $db->prepare(
+                "SELECT * FROM ventas WHERE personal_rut = :rut"
+            );
+            $ventas->execute(array(
+                ':rut' => $perso->rut
+            ));
+            $ventas = $ventas->fetchAll();
+            $perso->ventas = $ventas;
+        }
+        if($personal)
+        {
+            echo json_encode(array(
+                'personal' => $personal,
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => false,
+            ));
+        }
+    }
+
+
+
 }

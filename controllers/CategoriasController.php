@@ -56,7 +56,10 @@ class CategoriasController extends Controller
         $select = $select->fetchAll();
         if($select)
         {
-            echo json_encode($select);
+            echo json_encode(array(
+                'respuesta' => true,
+                'categorias' => $select,
+            ));
         }           
     }
 }

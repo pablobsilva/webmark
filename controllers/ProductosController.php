@@ -16,25 +16,6 @@ class ProductosController extends Controller
     }
 
     /*
-    * @param recbie los datos a traves de la clase request
-    * @return la vista para hacer un registro de compras de productos
-    */
-    public function comprar()
-    {   
-        require_once '../classes/Conexion.php';
-        $db = Conexion::retornar();
-        $categorias = $db->prepare('SELECT * FROM categorias');
-        $categorias->execute();
-        $categorias = $categorias->fetchAll();
-        return $this
-        ->view
-        ->make('administrador.producto/comprar/comprar')
-        ->with(array(
-            'categorias' => $categorias,
-        ))
-        ->render();
-    }
-    /*
     * @return la vista para visualizar todos los productos junto con los datos de los productos y las categorias
     */
     public function productos()
@@ -47,7 +28,7 @@ class ProductosController extends Controller
         $db = Conexion::retornar();
         $productos = $db->prepare('SELECT productos.idProducto, productos.nombre, productos.precio, productos.codigodebarra, productos.stock, categorias.nombre as categoria
         FROM productos
-        INNER JOIN categorias ON productos.categoria=categorias.idCategoria
+        INNER JOIN categorias ON productos.idCategoria=categorias.idCategoria
         WHERE rut_empresa = :rut_empresa'
         );
         $productos->execute(
@@ -61,31 +42,23 @@ class ProductosController extends Controller
         );
     }
 
-    /*
-    * @return la información necesaria para el formulario editar
-    */
-
-    public function FormularioEditar()
+    public function datediff()
     {
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
-        $categorias = $db->prepare('SELECT * FROM Categoria');
-        $categorias->execute();
-        $categorias = $categorias->fetchAll();
-        
-        $db = Conexion::retornar();
-        $productos = $db->prepare('SELECT * FROM Producto');
-        $productos->execute();
-        $productos = $productos->fetchAll();
-        // devuelve las categorias para poder elegir una nueva en el caso que sea así. 
-        return $this
-        ->view
-        ->make('productos.editar')
-        ->with(array(
-            'categorias' => $categorias,
-            'productos' => $productos,
-        ))
-        ->render();
+        $datediff = $db->prepare(
+            "SELECT DATEDIFF(:fecha_actual, :fecha_vencimiento)"
+        );
+        $datediff->execute(array(
+            ':fecha_vencimiento' => '2020-07-10',
+            ':fecha_actual' =>'2020-06-26'
+        ));
+        $datediff = $datediff->fetch();
+        echo json_encode(
+            array(
+                "datediff" => $datediff,
+            )
+        );
     }
     /*
      *@param todos los parametros son rescatados por la clase request
@@ -111,7 +84,7 @@ class ProductosController extends Controller
         $insert = $db->prepare( 
             'INSERT INTO productos
             (
-                nombre, precio, codigodebarra, stock, categoria, rut_empresa 
+                nombre, precio, codigodebarra, stock, idCategoria, rut_empresa 
             )
              VALUES
             (
@@ -157,7 +130,7 @@ class ProductosController extends Controller
         $insert = $db->prepare(
             "UPDATE productos
             
-               SET nombre = :nombre, precio = :precio, codigodebarra = :codigodebarra, categoria = :idcategoria, stock = :stock
+               SET nombre = :nombre, precio = :precio, codigodebarra = :codigodebarra, idCategoria = :idcategoria, stock = :stock
                
                WHERE idProducto = :idproducto
         ");
@@ -346,7 +319,13 @@ class ProductosController extends Controller
         require_once '../classes/Conexion.php';
         $db = Conexion::retornar();
         $data = json_decode(file_get_contents("php://input"));
-        $producto = $db->prepare("SELECT * FROM productos WHERE codigodebarra = :codigodebarra AND rut_empresa = :rut_empresa" );
+        $producto = $db->prepare(
+            "SELECT p.idProducto, p.nombre, p.precio, p.codigodebarra, p.stock, p.rut_empresa, c.nombre as categoria
+            FROM productos p 
+            INNER JOIN categorias c 
+                ON p.idCategoria = c.idCategoria 
+            WHERE codigodebarra = :codigodebarra 
+                AND rut_empresa = :rut_empresa");
         $producto->execute(array(
             ':codigodebarra' => $data->codigodebarra,
             ':rut_empresa' => $data->rut_empresa
@@ -379,4 +358,60 @@ class ProductosController extends Controller
             echo json_encode($producto);
         }
     }
+
+    public function AvisoVencimiento()
+    {
+        $fecha = date('Y-m-d', time());
+        $data = json_decode(file_get_contents("php://input"));
+        require_once '../classes/Conexion.php';
+        $db = Conexion::retornar();
+        $stocks = $db->prepare(
+            "SELECT * FROM stocks WHERE rut_empresa = :rut_empresa");
+        $stocks->execute(array(
+            'rut_empresa' => $data->rut_empresa
+        ));
+        $stocks = $stocks->fetchAll();
+        $productos_por_vencer = array();
+
+        foreach($stocks as $stock)
+        {
+            //SACAR PRODUCTOS 
+            $producto = $db->prepare(
+                "SELECT * FROM productos WHERE idProducto = :idproducto"
+            );
+            $producto->execute(array(
+                ':idproducto' => $stock->idProducto
+            ));
+            $producto = $producto->fetch();
+            //CALCULAR DÍAS CERCANOS A FECHA DE VENCIMIENTO
+            $datediff = $db->prepare(
+                "SELECT DATEDIFF(:fecha_vencimiento, :fecha_actual ) as dias"
+            );
+            $datediff->execute(array(
+                ':fecha_vencimiento' => $stock->fechavencimiento,
+                ':fecha_actual' =>$fecha
+            ));
+            $datediff = $datediff->fetch();
+
+            if($datediff->dias<30)
+            {
+                $productos_por_vencer[] = $producto;
+            }
+        }
+        if(count($productos_por_vencer)>=1)
+        {
+            echo json_encode(array(
+                'respuesta' => true,
+                'productos' => $productos_por_vencer
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'respuesta' => false
+            ));
+        }
+    }
+
+
 }
